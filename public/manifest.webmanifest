@@ -1,0 +1,21 @@
+{
+  "name": "Poteto 人类资格年审",
+  "short_name": "Poteto",
+  "description": "免注册、零门槛的每日 90 秒人类资格年审，与北海道对照组土豆同场竞技。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF7F0",
+  "theme_color": "#1C1917",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

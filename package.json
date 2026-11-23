@@ -1,0 +1,38 @@
+{
+  "name": "poteto",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Poteto — 每日人类资格年审：90秒对抗一颗北海道对照组土豆",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "wrangler dev",
+    "deploy": "astro build && wrangler deploy",
+    "check": "astro check",
+    "curate": "node scripts/daily-curate.mjs",
+    "generate:assets": "node scripts/generate-assets.mjs"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^12.6.0",
+    "@astrojs/react": "^4.2.1",
+    "@astrojs/sitemap": "^3.3.0",
+    "@neondatabase/serverless": "^1.0.0",
+    "@tailwindcss/vite": "^4.1.0",
+    "astro": "^5.7.0",
+    "lucide-react": "^0.511.0",
+    "motion": "^12.10.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwindcss": "^4.1.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "daisyui": "^5.0.0",
+    "sharp": "^0.34.1",
+    "typescript": "^5.8.0",
+    "wrangler": "^4.14.0"
+  }
+}

@@ -1,0 +1,38 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const contactEmail = import.meta.env.PUBLIC_CONTACT_EMAIL || 'hello@poteto.fun';
+---
+
+<Layout
+  title="隐私政策 — Poteto 人类资格年审"
+  description="Poteto 坚持零登录与极简数据原则，仅保存匿名客户端标识与归一化矢量坐标，不收集任何个人身份信息。"
+  canonicalPath="/privacy"
+>
+  <article class="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+    <div class="rounded-3xl border border-[#E2D9C8] bg-white p-6 shadow-xs sm:p-10">
+      <span class="font-mono text-xs font-bold tracking-wider text-[#78716C] uppercase">
+        PRIVACY POLICY · EFFECTIVE 2026-11
+      </span>
+      <h1 class="mt-2 font-display text-3xl font-extrabold text-[#1C1917]">隐私政策</h1>
+
+      <div class="mt-6 space-y-4 text-sm leading-relaxed text-[#44403C]">
+        <p>Poteto（以下简称“本站”）高度重视您的隐私。本站不提供账号注册功能，也不收集您的姓名、手机号、电子邮件或精确地理位置信息。</p>
+
+        <h2 class="pt-2 font-display text-lg font-bold text-[#1C1917]">1. 我们存储哪些数据</h2>
+        <ul class="list-disc space-y-1.5 pl-5">
+          <li><strong>本地存储（localStorage）</strong>：浏览器本地随机生成的匿名 <code>client_id</code>（UUID）、每日年审成绩、连胜天数与提醒偏好。您可以随时清除浏览器数据以重置。</li>
+          <li><strong>矢量手绘数据</strong>：当您完成第 3 关手绘提交时，本站仅上传归一化后的 0–100 矢量坐标数组（不含任何 EXIF 或设备指纹）及匿名 <code>client_id</code>，用于次日精选池展示与回访战报统计。</li>
+        </ul>
+
+        <h2 class="pt-2 font-display text-lg font-bold text-[#1C1917]">2. 内容安全与删除请求</h2>
+        <p>
+          所有手绘作品均须经过前端规则筛选与次日精选隔离机制，且支持社区举报满 3 次自动隐藏。如需删除您提交的特定矢量画作，请附带日期联系：
+          <a href={`mailto:${contactEmail}`} class="font-mono font-semibold text-[#C86D2D] underline">
+            {contactEmail}
+          </a>
+        </p>
+      </div>
+    </div>
+  </article>
+</Layout>
