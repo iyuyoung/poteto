@@ -76,16 +76,16 @@ export interface ValidationResult {
 
 /**
  * Layer 1 Anti-Abuse / Anti-TTP Validation (shared between client & server):
- * 1. 1 to 3 strokes max
- * 2. Stroke 1 must be roughly closed (start-to-end distance < 25 in 0..100 coordinates)
- * 3. Stroke 1 bounding box must have reasonable potato size (>= 18x18) and aspect ratio between 0.5 and 2.0
+ * 1. 1 to 4 strokes max (1 outline + up to 3 face details: eyes + mouth/sprout)
+ * 2. Stroke 1 must be roughly closed (start-to-end distance < 32 in 0..100 coordinates)
+ * 3. Stroke 1 bounding box must have reasonable potato size (>= 18x18) and aspect ratio between 0.45 and 2.2
  */
 export function validatePotatoDrawing(data: PotatoPathData): ValidationResult {
   if (!data || !Array.isArray(data.strokes) || data.strokes.length === 0) {
-    return { valid: false, reason: '至少需要画出第 1 笔土豆轮廓哦。' };
+    return { valid: false, reason: '先画第 1 笔土豆轮廓，再给它点上表情吧。' };
   }
-  if (data.strokes.length > 3) {
-    return { valid: false, reason: '最多只允许画 3 笔（1 笔轮廓 + 2 笔五官）。' };
+  if (data.strokes.length > 4) {
+    return { valid: false, reason: '最多只允许画 4 笔（1 笔轮廓 + 3 笔五官）。' };
   }
 
   for (const stroke of data.strokes) {
@@ -131,10 +131,10 @@ export function validatePotatoDrawing(data: PotatoPathData): ValidationResult {
   }
 
   const aspectRatio = bboxW / bboxH;
-  if (aspectRatio < 0.5 || aspectRatio > 2.0) {
+  if (aspectRatio < 0.45 || aspectRatio > 2.2) {
     return {
       valid: false,
-      reason: '形状太细长了（更像薯条或法棍），土豆的长宽比需在 0.5 ~ 2.0 之间。',
+      reason: '形状太细长了（更像薯条），土豆的长宽比需在 0.45 ~ 2.2 之间。',
       aspectRatio,
     };
   }
@@ -142,10 +142,10 @@ export function validatePotatoDrawing(data: PotatoPathData): ValidationResult {
   const start = outline[0];
   const end = outline[outline.length - 1];
   const closureDistance = Math.hypot(end[0] - start[0], end[1] - start[1]);
-  if (closureDistance > 25) {
+  if (closureDistance > 32) {
     return {
       valid: false,
-      reason: '第 1 笔轮廓还没闭合！请让起点和终点靠近一些（距离小于画布 25%）。',
+      reason: '第 1 笔轮廓还没闭合！让起点和终点再靠近一点点就好。',
       closureDistance,
       aspectRatio,
     };

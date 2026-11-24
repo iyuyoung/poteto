@@ -7,7 +7,7 @@ export const STAGE1_PROMPTS: Stage1Prompt[] = [
   {
     id: 's1-resign',
     title: '选出看起来最想辞职的 3 颗土豆',
-    subtitle: '注意观察它们的轮廓塌陷度与眼神空洞指数',
+    subtitle: '注意观察它们的轮廓塌陷度与眼神空洞指数（小心官方伪装项）',
     targetCount: 3,
     tagLabel: '职场倦怠鉴定',
   },
@@ -56,9 +56,18 @@ export const STAGE1_PROMPTS: Stage1Prompt[] = [
 ];
 
 /**
- * Stage 2 Micro-Games Pool (16 distinct counter-intuitive games; never repeats within 7+ days)
+ * Stage 2 Micro-Games Pool (16 distinct counter-intuitive games; never repeats within 16 days)
+ * Ordered so the punchiest visual/physical games land front-and-center.
  */
 export const STAGE2_GAMES: Stage2GameMeta[] = [
+  {
+    id: 'dodging-button',
+    title: '逃逸的确认键',
+    instruction: '点击「我是人类」按钮完成核验。它有点社恐，追几次它就跑不动了。',
+    potatoStatus: '冷眼旁观中',
+    potatoQuip: 'Poteto #01 从不追逐任何按钮。',
+    difficulty: 'tricky',
+  },
   {
     id: 'stillness-5s',
     title: '绝对静止测试',
@@ -76,35 +85,11 @@ export const STAGE2_GAMES: Stage2GameMeta[] = [
     difficulty: 'absurd',
   },
   {
-    id: 'dodging-button',
-    title: '逃逸的确认键',
-    instruction: '点击「我是人类」按钮完成核验。它有点怕生，请耐心追捕或等它跑累。',
-    potatoStatus: '冷眼旁观中',
-    potatoQuip: 'Poteto #01 从不追逐任何按钮。',
-    difficulty: 'tricky',
-  },
-  {
     id: 'dont-press-red',
     title: '冲动抑制实验',
     instruction: '倒计时 5 秒结束前，绝对不要按下面那颗非常诱人的红色按钮。',
     potatoStatus: '毫无手脚 · 绝对服从',
     potatoQuip: 'Poteto #01 没有手指，因此从未手贱。',
-    difficulty: 'gentle',
-  },
-  {
-    id: 'reverse-slider',
-    title: '反直觉纯度校准',
-    instruction: '将下方滑块精准停在 48% ~ 52% 之间，但滑动方向被我们偷偷反接了。',
-    potatoStatus: '稳定输出 50.0%',
-    potatoQuip: 'Poteto #01 的淀粉含量常年精准卡在 50%。',
-    difficulty: 'tricky',
-  },
-  {
-    id: 'fake-loading',
-    title: '现代人耐心体检',
-    instruction: '等待审验进度条加载到 100%。切记：千万别点「催一下」，否则会重置。',
-    potatoStatus: '在地底已等了 90 天',
-    potatoQuip: 'Poteto #01 对等待拥有地质纪元级别的耐心。',
     difficulty: 'gentle',
   },
   {
@@ -116,9 +101,17 @@ export const STAGE2_GAMES: Stage2GameMeta[] = [
     difficulty: 'tricky',
   },
   {
+    id: 'reverse-slider',
+    title: '反直觉纯度校准',
+    instruction: '将下方滑块精准停在 48% ~ 52% 之间，但滑动方向被我们偷偷反接了。',
+    potatoStatus: '稳定输出 50.0%',
+    potatoQuip: 'Poteto #01 的淀粉含量常年精准卡在 50%。',
+    difficulty: 'tricky',
+  },
+  {
     id: 'gravity-checkbox',
     title: '重力失控勾选框',
-    instruction: '人机验证框不小心掉下去了！在它弹跳时精准勾中它。',
+    instruction: '人机验证框不小心掉下去了！在它弹跳时精准点中它。',
     potatoStatus: '稳稳贴地',
     potatoQuip: 'Poteto #01 深受牛顿力学眷顾。',
     difficulty: 'absurd',
@@ -132,12 +125,20 @@ export const STAGE2_GAMES: Stage2GameMeta[] = [
     difficulty: 'tricky',
   },
   {
-    id: 'typing-panic',
-    title: '反打字机自证',
-    instruction: '在输入框里完整敲出「我是人类」四个字，抵抗系统的土豆化自动纠错。',
-    potatoStatus: '拒绝打字',
-    potatoQuip: 'Poteto #01 认为语言是人类多余的进化。',
-    difficulty: 'absurd',
+    id: 'fake-loading',
+    title: '现代人耐心体检',
+    instruction: '等待审验进度条加载到 100%。切记：千万别点「催一下」，否则会重置。',
+    potatoStatus: '在地底已等了 90 天',
+    potatoQuip: 'Poteto #01 对等待拥有地质纪元级别的耐心。',
+    difficulty: 'gentle',
+  },
+  {
+    id: 'drag-to-peel',
+    title: '手工削皮资格考',
+    instruction: '按住并左右来回擦拭土豆 3 次完成削皮，证明你拥有灵巧的对生拇指。',
+    potatoStatus: '穿了两层皮',
+    potatoQuip: '削完一层皮，里面还是 Poteto #01。',
+    difficulty: 'gentle',
   },
   {
     id: 'liar-buttons',
@@ -164,14 +165,6 @@ export const STAGE2_GAMES: Stage2GameMeta[] = [
     difficulty: 'gentle',
   },
   {
-    id: 'drag-to-peel',
-    title: '手工削皮资格考',
-    instruction: '按住并左右来回擦拭土豆 3 次完成削皮，证明你拥有灵巧的对生拇指。',
-    potatoStatus: '穿了两层皮',
-    potatoQuip: '削完一层皮，里面还是 Poteto #01。',
-    difficulty: 'gentle',
-  },
-  {
     id: 'spot-the-human',
     title: '反向图灵辨认',
     instruction: '在以下 6 个轮廓中，找出唯一那个「不是土豆」的家伙。',
@@ -187,6 +180,14 @@ export const STAGE2_GAMES: Stage2GameMeta[] = [
     potatoQuip: 'Poteto #01 每周七天都是泥土假期。',
     difficulty: 'gentle',
   },
+  {
+    id: 'typing-panic',
+    title: '反打字机自证',
+    instruction: '依次点击下方字块拼出「我不是土豆」——注意它们会偷偷互换位置。',
+    potatoStatus: '拒绝打字',
+    potatoQuip: 'Poteto #01 认为语言是人类多余的进化。',
+    difficulty: 'absurd',
+  },
 ];
 
 /**
@@ -195,20 +196,20 @@ export const STAGE2_GAMES: Stage2GameMeta[] = [
 export const STAGE3_PROMPTS: Stage3Prompt[] = [
   {
     id: 'p-layoff',
-    title: '一笔画出一颗刚被裁员的土豆',
-    hint: '第 1 笔闭合轮廓，再补 2 笔画出它失去梦想的眼神',
+    title: '画一颗刚收到裁员通知的土豆',
+    hint: '第 1 笔闭合轮廓，再用 2~3 笔画出它失去梦想的表情',
     badgeText: '职场受难薯',
   },
   {
     id: 'p-garlic',
     title: '画一颗正在拼命装蒜的土豆',
-    hint: '第 1 笔土豆身体，后 2 笔可以加点假装清高的蒜瓣纹',
+    hint: '第 1 笔土豆身体，后 3 笔加点假装清高的蒜瓣纹或表情',
     badgeText: '跨物种影帝',
   },
   {
     id: 'p-civil',
     title: '画一颗刚刚考上编制的土豆',
-    hint: '轮廓要圆润体面，眼神里透着稳重与端庄',
+    hint: '轮廓圆润体面，眼神里透着稳重与端庄',
     badgeText: '上岸稳重薯',
   },
   {
@@ -226,19 +227,19 @@ export const STAGE3_PROMPTS: Stage3Prompt[] = [
   {
     id: 'p-love',
     title: '画一颗陷入单相思的土豆',
-    hint: '第 1 笔画出害羞的块茎，后 2 笔点出含情脉脉的眼睛',
+    hint: '第 1 笔画出害羞的块茎，后几笔点出含情脉脉的表情',
     badgeText: '纯爱战士薯',
   },
   {
     id: 'p-rich',
     title: '画一颗中了彩票但不敢告诉亲戚的土豆',
-    hint: '表面镇定，内心狂喜，3 笔之内拿捏微表情',
+    hint: '表面镇定，内心狂喜，4 笔之内拿捏微表情',
     badgeText: '低调暴富薯',
   },
   {
     id: 'p-fries',
     title: '画一颗听到「空气炸锅」四个字时的土豆',
-    hint: '用 3 笔传达出灵魂出窍的惊恐感',
+    hint: '用 3~4 笔传达出灵魂出窍的惊恐感',
     badgeText: '危机意识薯',
   },
   {
@@ -256,22 +257,23 @@ export const STAGE3_PROMPTS: Stage3Prompt[] = [
 ];
 
 /**
- * Curated Seed UGC Drawings (normalized 0..100 integer strokes, 300-600 bytes each).
- * Used immediately when DATABASE_URL is unset or when yesterday's Neon pool has < 12 approved drawings.
+ * Hand-crafted expressive organic vector potato doodles (0..100 normalized strokes).
+ * Each has a distinct personality, wobbly organic silhouette, and expressive face!
  */
 export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
   {
     id: 'seed-01',
     promptId: 'p-layoff',
     auditDate: '2026-11-23',
-    caption: '眼神已经离职',
+    caption: '眼神已离职',
     authorTag: '匿名打工人 #409',
     fooledCount: 64,
     pathData: {
       strokes: [
-        [[24, 48], [22, 30], [38, 18], [62, 20], [78, 34], [80, 56], [68, 76], [44, 82], [26, 68], [24, 48]],
-        [[38, 44], [46, 46]],
-        [[58, 46], [66, 44]],
+        [[22, 56], [19, 41], [25, 27], [39, 19], [57, 19], [73, 27], [82, 42], [81, 61], [72, 76], [54, 83], [34, 80], [23, 69], [22, 56]],
+        [[34, 44], [43, 47]],
+        [[66, 44], [57, 47]],
+        [[43, 63], [50, 59], [58, 63]],
       ],
     },
   },
@@ -284,9 +286,10 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     fooledCount: 41,
     pathData: {
       strokes: [
-        [[50, 14], [68, 30], [82, 54], [74, 78], [50, 86], [26, 78], [18, 54], [32, 30], [50, 14]],
-        [[42, 48], [44, 52]],
-        [[58, 48], [60, 52]],
+        [[50, 14], [58, 25], [73, 35], [82, 52], [79, 70], [66, 82], [49, 85], [31, 81], [20, 68], [19, 50], [29, 34], [43, 24], [50, 14]],
+        [[38, 49], [42, 45], [46, 49]],
+        [[55, 49], [59, 45], [63, 49]],
+        [[46, 62], [51, 66], [56, 62]],
       ],
     },
   },
@@ -299,9 +302,10 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     fooledCount: 53,
     pathData: {
       strokes: [
-        [[20, 54], [26, 26], [52, 18], [76, 28], [84, 52], [74, 76], [46, 80], [22, 70], [20, 54]],
-        [[36, 44], [44, 48], [36, 52]],
-        [[64, 44], [56, 48], [64, 52]],
+        [[18, 56], [21, 38], [32, 24], [50, 19], [69, 23], [82, 37], [84, 56], [76, 74], [58, 82], [36, 80], [21, 70], [18, 56]],
+        [[34, 44], [40, 49], [34, 53]],
+        [[66, 44], [60, 49], [66, 53]],
+        [[43, 62], [50, 61], [57, 63]],
       ],
     },
   },
@@ -314,9 +318,10 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     fooledCount: 29,
     pathData: {
       strokes: [
-        [[26, 42], [34, 22], [58, 18], [76, 32], [78, 58], [66, 78], [40, 82], [24, 66], [26, 42]],
-        [[36, 48], [42, 52], [48, 48]],
-        [[56, 48], [62, 52], [68, 48]],
+        [[25, 48], [27, 31], [40, 20], [58, 19], [74, 28], [80, 46], [77, 67], [64, 80], [44, 83], [28, 74], [23, 60], [25, 48]],
+        [[34, 48], [41, 52], [47, 48]],
+        [[54, 48], [61, 52], [67, 48]],
+        [[46, 64], [51, 66], [56, 64]],
       ],
     },
   },
@@ -329,9 +334,10 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     fooledCount: 77,
     pathData: {
       strokes: [
-        [[30, 22], [58, 16], [76, 34], [80, 62], [64, 82], [34, 80], [20, 58], [22, 34], [30, 22]],
-        [[38, 38], [40, 44]],
-        [[58, 38], [60, 44]],
+        [[26, 36], [36, 20], [56, 17], [73, 27], [81, 47], [77, 68], [62, 82], [40, 82], [23, 68], [20, 50], [26, 36]],
+        [[38, 41], [38, 45]],
+        [[61, 41], [61, 45]],
+        [[45, 58], [50, 53], [55, 58], [50, 65], [45, 58]],
       ],
     },
   },
@@ -344,9 +350,10 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     fooledCount: 38,
     pathData: {
       strokes: [
-        [[22, 50], [26, 26], [50, 20], [74, 26], [78, 50], [74, 74], [50, 80], [26, 74], [22, 50]],
-        [[40, 42], [40, 46]],
-        [[60, 42], [60, 46]],
+        [[21, 50], [23, 33], [35, 22], [52, 19], [69, 23], [79, 36], [80, 55], [73, 73], [56, 82], [37, 81], [24, 69], [21, 50]],
+        [[38, 44], [41, 44]],
+        [[59, 44], [62, 44]],
+        [[42, 58], [50, 63], [58, 58]],
       ],
     },
   },
@@ -359,9 +366,10 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     fooledCount: 49,
     pathData: {
       strokes: [
-        [[18, 46], [28, 24], [54, 22], [80, 32], [84, 56], [70, 76], [40, 78], [20, 66], [18, 46]],
-        [[36, 44], [46, 44]],
-        [[56, 44], [66, 44]],
+        [[18, 49], [23, 32], [38, 23], [58, 22], [76, 30], [84, 47], [80, 66], [66, 78], [44, 80], [25, 72], [18, 59], [18, 49]],
+        [[34, 45], [45, 45]],
+        [[56, 45], [67, 45]],
+        [[46, 61], [56, 58]],
       ],
     },
   },
@@ -374,9 +382,10 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     fooledCount: 33,
     pathData: {
       strokes: [
-        [[28, 34], [46, 18], [70, 24], [80, 48], [72, 74], [48, 84], [26, 72], [22, 50], [28, 34]],
-        [[40, 44], [44, 40], [48, 44]],
-        [[56, 44], [60, 40], [64, 44]],
+        [[26, 42], [35, 24], [53, 18], [71, 25], [81, 43], [78, 65], [64, 80], [44, 84], [27, 74], [21, 57], [26, 42]],
+        [[37, 47], [42, 42], [47, 47]],
+        [[54, 47], [59, 42], [64, 47]],
+        [[46, 60], [50, 65], [55, 60]],
       ],
     },
   },
@@ -389,9 +398,10 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     fooledCount: 58,
     pathData: {
       strokes: [
-        [[24, 44], [32, 20], [60, 18], [80, 36], [78, 64], [60, 82], [32, 78], [20, 60], [24, 44]],
-        [[38, 40], [42, 42]],
-        [[56, 40], [62, 44]],
+        [[22, 46], [28, 28], [44, 19], [64, 21], [79, 34], [81, 56], [71, 75], [52, 83], [32, 78], [21, 63], [22, 46]],
+        [[36, 43], [44, 40]],
+        [[56, 40], [64, 43]],
+        [[40, 58], [52, 66], [64, 55]],
       ],
     },
   },
@@ -399,14 +409,15 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     id: 'seed-10',
     promptId: 'p-gym',
     auditDate: '2026-11-23',
-    caption: '方方正正的碳水',
+    caption: '碳水猛男',
     authorTag: '卧推 2 公斤 #612',
     fooledCount: 27,
     pathData: {
       strokes: [
-        [[24, 26], [50, 20], [76, 26], [80, 52], [74, 78], [50, 82], [26, 78], [20, 52], [24, 26]],
-        [[36, 42], [46, 46]],
-        [[64, 42], [54, 46]],
+        [[23, 34], [36, 21], [55, 19], [74, 25], [81, 44], [79, 68], [65, 81], [43, 82], [25, 73], [20, 52], [23, 34]],
+        [[34, 41], [45, 46]],
+        [[66, 41], [55, 46]],
+        [[42, 62], [58, 62]],
       ],
     },
   },
@@ -419,9 +430,10 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     fooledCount: 45,
     pathData: {
       strokes: [
-        [[16, 60], [24, 34], [50, 26], [76, 38], [86, 62], [72, 80], [42, 82], [18, 74], [16, 60]],
-        [[38, 52], [42, 56]],
-        [[58, 52], [62, 56]],
+        [[15, 62], [19, 44], [33, 31], [54, 27], [74, 34], [85, 50], [83, 68], [68, 80], [45, 82], [23, 77], [15, 62]],
+        [[36, 52], [43, 55]],
+        [[57, 55], [64, 52]],
+        [[46, 66], [54, 66]],
       ],
     },
   },
@@ -434,30 +446,32 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     fooledCount: 51,
     pathData: {
       strokes: [
-        [[26, 36], [42, 18], [68, 22], [80, 44], [74, 72], [50, 84], [26, 74], [20, 52], [26, 36]],
-        [[36, 46], [46, 44]],
-        [[56, 44], [66, 46]],
+        [[25, 38], [38, 20], [59, 19], [76, 30], [81, 50], [74, 72], [56, 83], [35, 80], [22, 65], [21, 49], [25, 38]],
+        [[37, 46], [46, 44]],
+        [[56, 44], [65, 46]],
+        [[47, 61], [55, 59]],
       ],
     },
   },
 ];
 
 /**
- * Official Decoy Drawing (1 per 3x3 grid: suspiciously geometric / non-potato)
+ * Official Decoy Drawing (1 per 3x3 grid: suspiciously geometric hexagon pretending to be a potato)
  */
 export const OFFICIAL_DECOY_DRAWING: PotatoDrawing = {
   id: 'official-decoy-01',
   promptId: 'official-decoy',
   auditDate: '2026-11-24',
   isOfficialDecoy: true,
-  caption: '官方干扰项 · 伪装石块',
+  caption: '绝对是真土豆',
   authorTag: '年审局质检科',
   fooledCount: 120,
   pathData: {
     strokes: [
-      [[20, 50], [32, 22], [68, 22], [80, 50], [68, 78], [32, 78], [20, 50]],
-      [[38, 44], [44, 44]],
-      [[56, 44], [62, 44]],
+      [[50, 16], [82, 34], [82, 68], [50, 84], [18, 68], [18, 34], [50, 16]],
+      [[38, 46], [44, 46]],
+      [[56, 46], [62, 46]],
+      [[44, 62], [56, 62]],
     ],
   },
 };
@@ -465,7 +479,7 @@ export const OFFICIAL_DECOY_DRAWING: PotatoDrawing = {
 export function getVerdictForPurity(purity: number, beatPotato: boolean): { title: string; subtitle: string } {
   if (purity >= 90) {
     return {
-      title: '纯度极高 · 疑似碳基天花板',
+      title: '人类纯度极高 · 碳基天花板',
       subtitle: '北海道对照组土豆（Poteto #01）向你致以短暂的沉默敬意。',
     };
   }

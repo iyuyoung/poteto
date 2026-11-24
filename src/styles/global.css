@@ -11,16 +11,19 @@
 
 @layer base {
   html {
-    background-color: #FAF7F0;
-    color: #1C1917;
+    background-color: #FAFAFB;
+    color: #09090B;
     font-family: var(--font-sans);
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
   }
 
   body {
     min-height: 100vh;
-    background-color: #FAF7F0;
-    background-image: radial-gradient(rgba(28, 25, 23, 0.06) 1px, transparent 1px);
-    background-size: 22px 22px;
+    background-color: #FAFAFB;
+    background-image:
+      radial-gradient(circle at 50% 0%, rgba(26, 115, 232, 0.045), transparent 55%),
+      radial-gradient(rgba(9, 9, 11, 0.055) 1px, transparent 1px);
+    background-size: 100% 100%, 24px 24px;
   }
 }
