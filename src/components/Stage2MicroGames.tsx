@@ -24,6 +24,7 @@ import type { Stage2GameMeta, StageResult } from '../lib/types';
 
 interface Stage2Props {
   game: Stage2GameMeta;
+  onScoreReveal?: (result: StageResult) => void;
   onComplete: (result: StageResult) => void;
 }
 
@@ -33,6 +34,8 @@ const StillnessGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => vo
   const [left, setLeft] = useState(5.0);
   const [baitStep, setBaitStep] = useState(0);
   const doneRef = useRef(false);
+  const onDoneRef = useRef(onDone);
+  onDoneRef.current = onDone;
 
   useEffect(() => {
     if (!armed) return;
@@ -47,7 +50,7 @@ const StillnessGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => vo
       if (rem <= 0 && !doneRef.current) {
         doneRef.current = true;
         window.clearInterval(timer);
-        onDone(true, 34, '顶住了 3 波离谱弹窗诱惑！你的定力勉强追平一颗土豆。');
+        onDoneRef.current(true, 34, '顶住了 3 波离谱弹窗诱惑！你的定力勉强追平一颗土豆。');
       }
     }, 50);
 
@@ -55,7 +58,7 @@ const StillnessGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => vo
       if (doneRef.current) return;
       doneRef.current = true;
       window.clearInterval(timer);
-      onDone(false, 12, '上当了！你一动，Poteto #01 靠全程装死轻松躺赢。');
+      onDoneRef.current(false, 12, '上当了！你一动，Poteto #01 靠全程装死轻松躺赢。');
     };
 
     const grace = window.setTimeout(() => {
@@ -69,7 +72,7 @@ const StillnessGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => vo
       window.removeEventListener('pointermove', fail);
       window.removeEventListener('touchstart', fail);
     };
-  }, [armed, onDone]);
+  }, [armed]);
 
   return (
     <div className="relative flex min-h-48 flex-col items-center justify-center py-4 text-center">
@@ -304,6 +307,8 @@ const DodgingButtonGame: React.FC<{ onDone: (p: boolean, h: number, s: string) =
 const DontPressRedGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => void }> = ({ onDone }) => {
   const [sec, setSec] = useState(5);
   const doneRef = useRef(false);
+  const onDoneRef = useRef(onDone);
+  onDoneRef.current = onDone;
 
   useEffect(() => {
     const t = window.setInterval(() => {
@@ -312,7 +317,10 @@ const DontPressRedGame: React.FC<{ onDone: (p: boolean, h: number, s: string) =>
           window.clearInterval(t);
           if (!doneRef.current) {
             doneRef.current = true;
-            onDone(true, 34, '连它变成绿色撒谎都没骗到你！人类防诈骗模范！');
+            window.setTimeout(
+              () => onDoneRef.current(true, 34, '连它变成绿色撒谎都没骗到你！人类防诈骗模范！'),
+              0
+            );
           }
           return 0;
         }
@@ -320,7 +328,7 @@ const DontPressRedGame: React.FC<{ onDone: (p: boolean, h: number, s: string) =>
       });
     }, 1000);
     return () => window.clearInterval(t);
-  }, [onDone]);
+  }, []);
 
   const fakeGreen = sec <= 2;
   const labels: Record<number, string> = {
@@ -423,6 +431,8 @@ const FakeLoadingGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => 
   const [pct, setPct] = useState(24);
   const [rushes, setRushes] = useState(0);
   const doneRef = useRef(false);
+  const onDoneRef = useRef(onDone);
+  onDoneRef.current = onDone;
 
   useEffect(() => {
     const t = window.setInterval(() => {
@@ -440,7 +450,7 @@ const FakeLoadingGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => 
     if (pct >= 100 && !doneRef.current) {
       doneRef.current = true;
       const passed = rushes === 0;
-      onDone(
+      onDoneRef.current(
         passed,
         passed ? 34 : 21,
         passed
@@ -448,7 +458,7 @@ const FakeLoadingGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => 
           : `你忍不住催了 ${rushes} 次，进度条被你吓得反复回滚。`
       );
     }
-  }, [pct, rushes, onDone]);
+  }, [pct, rushes]);
 
   return (
     <div className="flex flex-col items-center py-5">
@@ -963,20 +973,26 @@ const TrafficLightAbsurdGame: React.FC<{ onDone: (p: boolean, h: number, s: stri
   );
 };
 
-export const Stage2MicroGames: React.FC<Stage2Props> = ({ game, onComplete }) => {
+export const Stage2MicroGames: React.FC<Stage2Props> = ({
+  game,
+  onScoreReveal,
+  onComplete,
+}) => {
   const [revealedResult, setRevealedResult] = useState<StageResult | null>(null);
 
   const handleDone = (passed: boolean, humanScore: number, summary: string) => {
     if (revealedResult) return;
     if (passed) playSuccess();
     else playFail();
-    setRevealedResult({
+    const res: StageResult = {
       stage: 2,
       passed,
       humanScore,
       potatoScore: passed ? 28 : 34,
       summary,
-    });
+    };
+    setRevealedResult(res);
+    onScoreReveal?.(res);
   };
 
   const renderGame = () => {
@@ -1038,7 +1054,7 @@ export const Stage2MicroGames: React.FC<Stage2Props> = ({ game, onComplete }) =>
       <div className="p-5 sm:p-6">
         {!revealedResult ? (
           <>
-            <div className="min-h-[210px]">{renderGame()}</div>
+            <div className="flex min-h-[164px] flex-col justify-center">{renderGame()}</div>
             <p className="mt-4 rounded-xl bg-[#FAFAFB] px-4 py-2.5 text-xs text-[#71717A]">
               对照组备注：{game.potatoQuip}
             </p>

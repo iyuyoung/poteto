@@ -81,6 +81,7 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
   const [yesterdayHook, setYesterdayHook] = useState<YesterdayHookPayload | null>(null);
 
   const [stageResults, setStageResults] = useState<StageResult[]>([]);
+  const [savedDaily, setSavedDaily] = useState<AuditSessionResult | null>(null);
   const [finalResult, setFinalResult] = useState<AuditSessionResult | null>(null);
   const [endlessRound, setEndlessRound] = useState(0);
 
@@ -91,6 +92,7 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
 
     const saved = getSavedDailyResult(initialDaily.auditDate);
     if (saved) {
+      setSavedDaily(saved);
       setFinalResult(saved);
       setPhase('result');
     }
@@ -140,6 +142,13 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
     if (!next) playTick();
   };
 
+  const upsertStageScore = (res: StageResult) => {
+    setStageResults((prev) => {
+      const filtered = prev.filter((r) => r.stage !== res.stage);
+      return [...filtered, res].sort((a, b) => a.stage - b.stage);
+    });
+  };
+
   const handleCheckboxClick = () => {
     if (checkingBox) return;
     playTick();
@@ -147,27 +156,32 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
     window.setTimeout(() => {
       playPop(1);
       setCheckingBox(false);
+      // If daily audit is already completed, launch Endless Mode from entry seamlessly!
+      if (savedDaily) {
+        startEndlessMode();
+        return;
+      }
+      setMode('daily');
+      setActivePayload(initialDaily);
       setStageResults([]);
       setPhase('stage1');
     }, 460);
   };
 
   const handleStage1Done = (res: StageResult) => {
-    setStageResults([res]);
+    upsertStageScore(res);
     setPhase('stage2');
   };
 
   const handleStage2Done = (res: StageResult) => {
-    setStageResults((prev) => [...prev.slice(0, 1), res]);
+    upsertStageScore(res);
     setPhase('stage3');
   };
 
   const handleStage3Done = (res: StageResult, drawing: PotatoPathData) => {
-    const all: [StageResult, StageResult, StageResult] = [
-      stageResults[0],
-      stageResults[1],
-      res,
-    ];
+    const s1 = stageResults.find((r) => r.stage === 1) ?? stageResults[0];
+    const s2 = stageResults.find((r) => r.stage === 2) ?? stageResults[1];
+    const all: [StageResult, StageResult, StageResult] = [s1, s2, res];
     const humanTotal = all.reduce((s, r) => s + r.humanScore, 0);
     const potatoTotal = all.reduce((s, r) => s + r.potatoScore, 0);
     const humanPurity = Math.max(12, Math.min(99, Math.round((humanTotal / 102) * 100)));
@@ -176,6 +190,7 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
     const session: AuditSessionResult = {
       auditDate: activePayload.auditDate,
       auditNumber: activePayload.auditNumber,
+      endlessRound: mode === 'endless' ? endlessRound : undefined,
       mode,
       stages: all,
       humanPurity,
@@ -192,6 +207,7 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
     if (mode === 'daily') {
       const nextStreak = saveDailyResult(session);
       session.streak = nextStreak;
+      setSavedDaily(session);
     }
 
     setFinalResult(session);
@@ -223,7 +239,7 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
       ? 'max-w-[460px]'
       : phase === 'result'
         ? 'max-w-[600px]'
-        : 'max-w-[540px]';
+        : 'max-w-[500px]';
 
   return (
     <div className={`mx-auto w-full transition-all duration-200 ${containerWidth}`}>
@@ -232,7 +248,7 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
         <motion.div
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 flex items-center gap-3 rounded-2xl border border-[#FED7AA] bg-[#FFF7ED] px-4 py-3"
+          className="mb-5 flex items-center gap-3 rounded-2xl border border-[#FED7AA] bg-[#FFF7ED] px-4 py-3"
         >
           {yesterdayHook.drawing && (
             <div className="h-10 w-10 shrink-0 rounded-xl bg-white p-1 ring-1 ring-[#FDBA74]/50">
@@ -247,16 +263,46 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
       )}
 
       {/* Clean Uncluttered Status Strip */}
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <span className="font-mono text-xs font-bold tracking-tight text-[#52525B]">
-          {mode === 'endless'
-            ? `ENDLESS AUDIT #${endlessRound}`
-            : `POTETO AUDIT #${formatAuditNumber(activePayload.auditNumber)}`}
-        </span>
+      <div className="mb-2.5 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <span className="font-mono text-xs font-bold tracking-tight text-[#52525B]">
+            {mode === 'endless'
+              ? `ENDLESS AUDIT #${endlessRound}`
+              : `POTETO AUDIT #${formatAuditNumber(activePayload.auditNumber)}`}
+          </span>
+
+          {/* Subtle Return/Preview Entry Switch when daily is already completed */}
+          {savedDaily && phase === 'result' && (
+            <button
+              type="button"
+              onClick={() => {
+                playTick();
+                setPhase('entry');
+              }}
+              className="text-[11px] font-medium text-[#71717A] underline decoration-[#D4D4D8] underline-offset-4 transition hover:text-[#09090B]"
+            >
+              返回首屏
+            </button>
+          )}
+          {savedDaily && phase === 'entry' && (
+            <button
+              type="button"
+              onClick={() => {
+                playTick();
+                setMode('daily');
+                setFinalResult(savedDaily);
+                setPhase('result');
+              }}
+              className="text-[11px] font-medium text-[#1A73E8] underline decoration-[#BFDBFE] underline-offset-4 transition hover:text-[#1557B0]"
+            >
+              查看今日鉴定书
+            </button>
+          )}
+        </div>
 
         <div className="flex items-center gap-2">
           <span
-            className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 font-mono text-[11px] font-medium text-[#52525B] ring-1 ring-[#E4E4E7] tabular-nums"
+            className="inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 font-mono text-[11px] font-medium text-[#52525B] ring-1 ring-[#E4E4E7] tabular-nums"
             title="距离今日人类资格过期剩余时间"
           >
             <Clock className="h-3.5 w-3.5 text-[#A1A1AA]" strokeWidth={1.75} />
@@ -278,9 +324,9 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
         </div>
       </div>
 
-      {/* Persistent Control Potato HUD during Stages 1-3 */}
+      {/* Persistent Control Potato HUD during Stages 1-3 (updates live on reveal!) */}
       {(phase === 'stage1' || phase === 'stage2' || phase === 'stage3') && (
-        <div className="mb-4">
+        <div className="mb-3">
           <CompetitorHud
             humanScore={humanScore}
             potatoScore={potatoScore}
@@ -334,7 +380,11 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
                   )}
                 </span>
                 <span className="text-[15px] font-medium text-[#202124]">
-                  {checkingBox ? '正在检测淀粉含量…' : '我不是机器人'}
+                  {checkingBox
+                    ? '正在检测淀粉含量…'
+                    : savedDaily
+                      ? '再来一局无尽年审'
+                      : '我不是机器人'}
                 </span>
               </div>
 
@@ -349,7 +399,9 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
           </div>
 
           <p className="mt-8 font-mono text-xs text-[#A1A1AA]">
-            免注册 · 每日 UTC 00:00 全球同题刷新
+            {savedDaily
+              ? '今日年审已通过归档 · 勾选可进入无尽年审模式'
+              : '免注册 · 每日 UTC 00:00 全球同题刷新'}
           </p>
         </motion.section>
       )}
@@ -361,6 +413,7 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
           prompt={activePayload.stage1Prompt}
           initialDrawings={activePayload.featuredDrawings}
           reserveDrawings={activePayload.reserveDrawings}
+          onScoreReveal={upsertStageScore}
           onComplete={handleStage1Done}
         />
       )}
@@ -370,6 +423,7 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
         <Stage2MicroGames
           key={`s2-${activePayload.seed}-${activePayload.stage2Game.id}`}
           game={activePayload.stage2Game}
+          onScoreReveal={upsertStageScore}
           onComplete={handleStage2Done}
         />
       )}

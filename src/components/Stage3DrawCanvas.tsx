@@ -346,10 +346,12 @@ export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
             type="button"
             onClick={handleSubmit}
             disabled={strokes.length === 0 || scanning}
-            className={`btn h-10 rounded-xl border-0 px-6 text-sm font-semibold text-white disabled:bg-[#E4E4E7] disabled:text-[#A1A1AA] ${
-              liveCheck?.valid
-                ? 'bg-[#16A34A] hover:bg-[#15803D]'
-                : 'bg-[#1A73E8] hover:bg-[#1557B0]'
+            className={`btn h-10 rounded-xl border-0 px-6 text-sm font-semibold text-white ${
+              scanning
+                ? 'bg-[#16A34A] text-white disabled:bg-[#16A34A] disabled:text-white'
+                : liveCheck?.valid
+                  ? 'bg-[#16A34A] hover:bg-[#15803D] disabled:bg-[#E4E4E7] disabled:text-[#A1A1AA]'
+                  : 'bg-[#1A73E8] hover:bg-[#1557B0] disabled:bg-[#E4E4E7] disabled:text-[#A1A1AA]'
             }`}
           >
             {scanning

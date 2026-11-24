@@ -257,8 +257,8 @@ export const STAGE3_PROMPTS: Stage3Prompt[] = [
 ];
 
 /**
- * Hand-crafted expressive organic vector potato doodles (0..100 normalized strokes).
- * Each has a distinct personality, wobbly organic silhouette, and expressive face!
+ * Hand-crafted expressive organic vector potato doodles with distinct silhouettes & character cues!
+ * Peanut-waisted, pear-shaped, flat pancake, tall bean, lumpy russet, panicked air-fryer, etc.
  */
 export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
   {
@@ -268,12 +268,14 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     caption: '眼神已离职',
     authorTag: '匿名打工人 #409',
     fooledCount: 64,
+    features: { dimples: [[30, 72], [70, 68]], eyebags: true },
     pathData: {
+      // Peanut-waisted slumped potato
       strokes: [
-        [[22, 56], [19, 41], [25, 27], [39, 19], [57, 19], [73, 27], [82, 42], [81, 61], [72, 76], [54, 83], [34, 80], [23, 69], [22, 56]],
-        [[34, 44], [43, 47]],
-        [[66, 44], [57, 47]],
-        [[43, 63], [50, 59], [58, 63]],
+        [[26, 48], [22, 30], [34, 18], [55, 19], [72, 27], [77, 44], [71, 56], [79, 71], [67, 84], [45, 85], [26, 77], [22, 62], [26, 48]],
+        [[33, 42], [43, 46]],
+        [[65, 42], [55, 46]],
+        [[41, 66], [49, 61], [58, 66]],
       ],
     },
   },
@@ -284,12 +286,14 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     caption: '我是蒜不是薯',
     authorTag: '菜市场卧底 #112',
     fooledCount: 41,
+    features: { dimples: [[33, 73], [67, 73]], sprout: true },
     pathData: {
+      // Pear-shaped chubby garlic-impostor potato
       strokes: [
-        [[50, 14], [58, 25], [73, 35], [82, 52], [79, 70], [66, 82], [49, 85], [31, 81], [20, 68], [19, 50], [29, 34], [43, 24], [50, 14]],
-        [[38, 49], [42, 45], [46, 49]],
-        [[55, 49], [59, 45], [63, 49]],
-        [[46, 62], [51, 66], [56, 62]],
+        [[49, 20], [63, 28], [76, 44], [83, 64], [74, 80], [50, 86], [26, 80], [17, 64], [24, 44], [36, 28], [49, 20]],
+        [[36, 52], [41, 47], [46, 52]],
+        [[54, 52], [59, 47], [64, 52]],
+        [[45, 65], [50, 69], [55, 65]],
       ],
     },
   },
@@ -300,12 +304,14 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     caption: '凌晨三点的光',
     authorTag: '失眠专家 #887',
     fooledCount: 53,
+    features: { eyebags: true, dimples: [[28, 66], [74, 34]] },
     pathData: {
+      // Wide melting pillow potato
       strokes: [
-        [[18, 56], [21, 38], [32, 24], [50, 19], [69, 23], [82, 37], [84, 56], [76, 74], [58, 82], [36, 80], [21, 70], [18, 56]],
-        [[34, 44], [40, 49], [34, 53]],
-        [[66, 44], [60, 49], [66, 53]],
-        [[43, 62], [50, 61], [57, 63]],
+        [[14, 58], [18, 38], [34, 27], [58, 25], [79, 34], [87, 52], [82, 72], [62, 81], [36, 80], [17, 71], [14, 58]],
+        [[33, 45], [41, 49], [33, 51]],
+        [[67, 45], [59, 49], [67, 51]],
+        [[44, 64], [51, 63], [58, 65]],
       ],
     },
   },
@@ -313,15 +319,17 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     id: 'seed-04',
     promptId: 'p-zen',
     auditDate: '2026-11-23',
-    caption: '四大皆空',
+    caption: '发芽悟道薯',
     authorTag: '北海道修行者 #019',
     fooledCount: 29,
+    features: { sprout: true, blush: true, dimples: [[34, 74]] },
     pathData: {
+      // Tall oval zen potato
       strokes: [
-        [[25, 48], [27, 31], [40, 20], [58, 19], [74, 28], [80, 46], [77, 67], [64, 80], [44, 83], [28, 74], [23, 60], [25, 48]],
-        [[34, 48], [41, 52], [47, 48]],
-        [[54, 48], [61, 52], [67, 48]],
-        [[46, 64], [51, 66], [56, 64]],
+        [[28, 48], [30, 29], [43, 21], [59, 21], [72, 31], [75, 52], [71, 73], [57, 84], [41, 83], [29, 71], [28, 48]],
+        [[36, 48], [41, 52], [46, 48]],
+        [[54, 48], [59, 52], [64, 48]],
+        [[47, 63], [50, 65], [54, 63]],
       ],
     },
   },
@@ -332,12 +340,14 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     caption: '空气炸锅预警',
     authorTag: '逃生块茎 #703',
     fooledCount: 77,
+    features: { sweat: true, dimples: [[32, 70]] },
     pathData: {
+      // Tall startled bean potato
       strokes: [
-        [[26, 36], [36, 20], [56, 17], [73, 27], [81, 47], [77, 68], [62, 82], [40, 82], [23, 68], [20, 50], [26, 36]],
-        [[38, 41], [38, 45]],
-        [[61, 41], [61, 45]],
-        [[45, 58], [50, 53], [55, 58], [50, 65], [45, 58]],
+        [[29, 34], [40, 17], [58, 17], [71, 30], [74, 53], [69, 77], [53, 86], [35, 81], [25, 62], [29, 34]],
+        [[39, 40], [39, 46]],
+        [[59, 40], [59, 46]],
+        [[45, 59], [50, 54], [55, 59], [50, 68], [45, 59]],
       ],
     },
   },
@@ -345,12 +355,14 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     id: 'seed-06',
     promptId: 'p-civil',
     auditDate: '2026-11-23',
-    caption: '稳重圆润体面',
+    caption: '稳重编制薯',
     authorTag: '体制内土豆 #204',
     fooledCount: 38,
+    features: { dimples: [[29, 38], [71, 68]] },
     pathData: {
+      // Rounded-square dignified potato
       strokes: [
-        [[21, 50], [23, 33], [35, 22], [52, 19], [69, 23], [79, 36], [80, 55], [73, 73], [56, 82], [37, 81], [24, 69], [21, 50]],
+        [[22, 46], [24, 26], [42, 20], [64, 21], [78, 30], [80, 54], [75, 75], [56, 82], [33, 81], [21, 68], [22, 46]],
         [[38, 44], [41, 44]],
         [[59, 44], [62, 44]],
         [[42, 58], [50, 63], [58, 58]],
@@ -364,11 +376,13 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     caption: '对齐颗粒度中',
     authorTag: '周会幸存者 #516',
     fooledCount: 49,
+    features: { sweat: true, dimples: [[26, 62], [75, 64]] },
     pathData: {
+      // Tilted diagonal kidney potato
       strokes: [
-        [[18, 49], [23, 32], [38, 23], [58, 22], [76, 30], [84, 47], [80, 66], [66, 78], [44, 80], [25, 72], [18, 59], [18, 49]],
-        [[34, 45], [45, 45]],
-        [[56, 45], [67, 45]],
+        [[18, 52], [22, 33], [40, 23], [65, 25], [82, 38], [84, 59], [71, 76], [46, 78], [24, 70], [18, 52]],
+        [[34, 46], [45, 46]],
+        [[56, 46], [67, 46]],
         [[46, 61], [56, 58]],
       ],
     },
@@ -380,12 +394,14 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     caption: '暗恋隔壁地瓜',
     authorTag: '淀粉诗人 #331',
     fooledCount: 33,
+    features: { blush: true, dimples: [[68, 34]] },
     pathData: {
+      // Plump heart-leaning chubby potato
       strokes: [
-        [[26, 42], [35, 24], [53, 18], [71, 25], [81, 43], [78, 65], [64, 80], [44, 84], [27, 74], [21, 57], [26, 42]],
-        [[37, 47], [42, 42], [47, 47]],
-        [[54, 47], [59, 42], [64, 47]],
-        [[46, 60], [50, 65], [55, 60]],
+        [[24, 44], [32, 23], [52, 19], [72, 26], [82, 46], [76, 69], [55, 84], [33, 78], [20, 61], [24, 44]],
+        [[37, 46], [42, 41], [47, 46]],
+        [[54, 46], [59, 41], [64, 46]],
+        [[46, 61], [50, 66], [55, 61]],
       ],
     },
   },
@@ -396,12 +412,14 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     caption: '嘴角压不住',
     authorTag: '隐藏富豪 #998',
     fooledCount: 58,
+    features: { blush: true, dimples: [[32, 32], [70, 72]] },
     pathData: {
+      // Lumpy russet golden potato
       strokes: [
-        [[22, 46], [28, 28], [44, 19], [64, 21], [79, 34], [81, 56], [71, 75], [52, 83], [32, 78], [21, 63], [22, 46]],
-        [[36, 43], [44, 40]],
-        [[56, 40], [64, 43]],
-        [[40, 58], [52, 66], [64, 55]],
+        [[21, 50], [26, 28], [46, 18], [69, 22], [81, 39], [77, 57], [81, 71], [62, 83], [36, 81], [20, 67], [21, 50]],
+        [[35, 43], [44, 39]],
+        [[56, 39], [65, 43]],
+        [[39, 58], [52, 67], [65, 54]],
       ],
     },
   },
@@ -412,12 +430,14 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     caption: '碳水猛男',
     authorTag: '卧推 2 公斤 #612',
     fooledCount: 27,
+    features: { dimples: [[30, 72], [70, 72]] },
     pathData: {
+      // Broad-shouldered muscular inverted-trapezoid potato
       strokes: [
-        [[23, 34], [36, 21], [55, 19], [74, 25], [81, 44], [79, 68], [65, 81], [43, 82], [25, 73], [20, 52], [23, 34]],
-        [[34, 41], [45, 46]],
-        [[66, 41], [55, 46]],
-        [[42, 62], [58, 62]],
+        [[19, 32], [35, 20], [65, 20], [82, 32], [78, 56], [69, 80], [50, 84], [31, 80], [22, 56], [19, 32]],
+        [[33, 40], [45, 46]],
+        [[67, 40], [55, 46]],
+        [[42, 63], [58, 63]],
       ],
     },
   },
@@ -428,12 +448,14 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     caption: '歪成一滩泥',
     authorTag: '躺平土豆 #108',
     fooledCount: 45,
+    features: { eyebags: true, dimples: [[26, 72], [74, 72]] },
     pathData: {
+      // Super flat melted puddle potato
       strokes: [
-        [[15, 62], [19, 44], [33, 31], [54, 27], [74, 34], [85, 50], [83, 68], [68, 80], [45, 82], [23, 77], [15, 62]],
-        [[36, 52], [43, 55]],
-        [[57, 55], [64, 52]],
-        [[46, 66], [54, 66]],
+        [[12, 68], [17, 49], [34, 38], [56, 36], [77, 43], [88, 60], [83, 77], [58, 84], [27, 83], [12, 68]],
+        [[35, 56], [43, 59]],
+        [[57, 59], [65, 56]],
+        [[46, 70], [54, 70]],
       ],
     },
   },
@@ -444,19 +466,21 @@ export const SEED_POTATO_DRAWINGS: PotatoDrawing[] = [
     caption: '斜眼看人类',
     authorTag: '清醒块茎 #445',
     fooledCount: 51,
+    features: { sprout: true, dimples: [[68, 70]] },
     pathData: {
+      // Crooked sideways crescent potato
       strokes: [
-        [[25, 38], [38, 20], [59, 19], [76, 30], [81, 50], [74, 72], [56, 83], [35, 80], [22, 65], [21, 49], [25, 38]],
-        [[37, 46], [46, 44]],
-        [[56, 44], [65, 46]],
-        [[47, 61], [55, 59]],
+        [[26, 36], [42, 20], [66, 22], [80, 40], [74, 65], [60, 83], [36, 82], [22, 66], [26, 36]],
+        [[36, 46], [46, 44]],
+        [[56, 44], [66, 46]],
+        [[47, 62], [56, 59]],
       ],
     },
   },
 ];
 
 /**
- * Official Decoy Drawing (1 per 3x3 grid: suspiciously geometric hexagon pretending to be a potato)
+ * Official Decoy Drawing (1 per 3x3 grid: RAZOR-SHARP geometric hexagon rock!)
  */
 export const OFFICIAL_DECOY_DRAWING: PotatoDrawing = {
   id: 'official-decoy-01',
@@ -466,12 +490,13 @@ export const OFFICIAL_DECOY_DRAWING: PotatoDrawing = {
   caption: '绝对是真土豆',
   authorTag: '年审局质检科',
   fooledCount: 120,
+  features: { sharpPolygon: true },
   pathData: {
     strokes: [
-      [[50, 16], [82, 34], [82, 68], [50, 84], [18, 68], [18, 34], [50, 16]],
-      [[38, 46], [44, 46]],
-      [[56, 46], [62, 46]],
-      [[44, 62], [56, 62]],
+      [[50, 14], [83, 32], [83, 68], [50, 86], [17, 68], [17, 32], [50, 14]],
+      [[35, 45], [45, 45]],
+      [[55, 45], [65, 45]],
+      [[42, 62], [58, 62]],
     ],
   },
 };
@@ -480,23 +505,23 @@ export function getVerdictForPurity(purity: number, beatPotato: boolean): { titl
   if (purity >= 90) {
     return {
       title: '人类纯度极高 · 碳基天花板',
-      subtitle: '北海道对照组土豆（Poteto #01）向你致以短暂的沉默敬意。',
+      subtitle: '北海道对照组土豆（Poteto #01）向你致以沉默的敬意。',
     };
   }
   if (purity >= 72 && beatPotato) {
     return {
       title: '勉强过关 · 险胜对照组土豆',
-      subtitle: '你的行为略带迷惑性，但依然保住了今日的人类续费资格。',
+      subtitle: '你的行为略带迷惑性，但依然保住了今日的人类资格。',
     };
   }
   if (purity >= 52) {
     return {
       title: '人类纯度存疑 · 含薯量偏高',
-      subtitle: '经年审局复核，你在部分环节表现出了令人担忧的淀粉倾向。',
+      subtitle: '经年审局复核，你在部分环节表现出了明显的淀粉倾向。',
     };
   }
   return {
     title: '年审未通过 · 输给了北海道马铃薯',
-    subtitle: 'Poteto #01 全程一动未动便取得了领先，建议明日喝杯咖啡再来。',
+    subtitle: 'Poteto #01 全程一动未动就赢了，建议明日喝杯咖啡再来。',
   };
 }

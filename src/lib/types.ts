@@ -14,6 +14,14 @@ export interface PotatoDrawing {
   caption?: string;
   authorTag?: string;
   fooledCount?: number;
+  features?: {
+    dimples?: Array<[number, number]>;
+    sprout?: boolean;
+    blush?: boolean;
+    sweat?: boolean;
+    eyebags?: boolean;
+    sharpPolygon?: boolean;
+  };
 }
 
 export interface Stage1Prompt {
@@ -72,6 +80,7 @@ export interface StageResult {
 export interface AuditSessionResult {
   auditDate: string;
   auditNumber: number;
+  endlessRound?: number;
   mode: 'daily' | 'endless';
   stages: [StageResult, StageResult, StageResult];
   humanPurity: number;
