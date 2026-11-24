@@ -19,57 +19,53 @@ export const CompetitorHud: React.FC<CompetitorHudProps> = ({
 
   return (
     <motion.aside
-      initial={{ opacity: 0, y: -8 }}
+      initial={{ opacity: 0, y: -6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
-      className="flex items-center justify-between gap-3 rounded-2xl border border-[#E4E4E7] bg-white px-3.5 py-2.5 shadow-[0_2px_10px_rgba(0,0,0,0.03)]"
+      className="flex items-center justify-between gap-4 rounded-2xl border border-[#E4E4E7] bg-white px-4 py-3 shadow-[0_2px_12px_rgba(0,0,0,0.03)]"
       aria-label="对照组土豆实时战况"
     >
-      <div className="flex min-w-0 items-center gap-2.5">
-        <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#FFF7ED] ring-1 ring-[#FED7AA]">
-          <OfficialPotatoMascot className="h-7 w-7" sprout={currentStage === 3} />
-          <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-[#22C55E] ring-2 ring-white" />
+      <div className="flex min-w-0 items-center gap-3">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FAFAFB] ring-1 ring-[#E4E4E7]">
+          <OfficialPotatoMascot className="h-8 w-8" sprout={currentStage === 3} />
         </div>
         <div className="min-w-0">
-          <div className="flex items-center gap-1.5">
-            <span className="truncate font-display text-xs font-bold text-[#18181B]">
+          <div className="flex items-center gap-2">
+            <span className="font-display text-sm font-bold text-[#09090B]">
               Poteto #01
             </span>
-            <span className="rounded bg-[#F4F4F5] px-1.5 py-0.5 font-mono text-[10px] font-medium text-[#71717A]">
-              对照组
+            <span className="text-[11px] font-medium text-[#A1A1AA]">
+              北海道对照组
             </span>
           </div>
-          <p className="truncate text-[11px] text-[#71717A]">{potatoStatus}</p>
+          <p className="truncate text-xs text-[#71717A]">{potatoStatus}</p>
         </div>
       </div>
 
-      <div className="flex shrink-0 items-center gap-2">
-        <div className="flex items-baseline gap-1 rounded-xl bg-[#EFF6FF] px-2.5 py-1">
-          <span className="text-[10px] font-medium text-[#3B82F6]">你</span>
+      {/* Clean Tabular Scoreboard */}
+      <div className="flex shrink-0 items-center gap-3 rounded-xl bg-[#FAFAFB] px-3.5 py-2 ring-1 ring-[#F4F4F5]">
+        <div className="text-right">
+          <span className="block text-[10px] font-medium text-[#71717A]">你</span>
           <motion.span
             key={`h-${humanScore}`}
-            initial={{ scale: 1.25 }}
+            initial={{ scale: 1.2 }}
             animate={{ scale: 1 }}
-            className="font-mono text-sm font-bold text-[#1D4ED8]"
+            className="block font-mono text-base font-bold leading-none text-[#1A73E8] tabular-nums"
           >
             {humanScore}
           </motion.span>
         </div>
 
-        <span className="font-mono text-[10px] font-bold text-[#A1A1AA]">VS</span>
+        <div className="h-6 w-px bg-[#E4E4E7]" />
 
-        <div
-          className={`flex items-baseline gap-1 rounded-xl px-2.5 py-1 transition-colors ${
-            potatoLeading ? 'bg-[#FEF2F2]' : 'bg-[#FFF7ED]'
-          }`}
-        >
-          <span className="text-[10px] font-medium text-[#D97706]">土豆</span>
+        <div className="text-left">
+          <span className="block text-[10px] font-medium text-[#71717A]">土豆</span>
           <motion.span
             key={`p-${potatoScore}`}
-            initial={{ scale: 1.25 }}
+            initial={{ scale: 1.2 }}
             animate={{ scale: 1 }}
-            className={`font-mono text-sm font-bold ${
-              potatoLeading ? 'text-[#DC2626]' : 'text-[#B45309]'
+            className={`block font-mono text-base font-bold leading-none tabular-nums ${
+              potatoLeading ? 'text-[#DC2626]' : 'text-[#18181B]'
             }`}
           >
             {potatoScore}

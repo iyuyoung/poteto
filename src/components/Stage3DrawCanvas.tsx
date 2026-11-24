@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import { AlertCircle, ArrowRight, CheckCircle2, Pencil, RotateCcw, ScanLine, Undo2 } from 'lucide-react';
+import { Pencil, RotateCcw, Undo2 } from 'lucide-react';
 import {
   estimateJsonBytes,
   normalizeStroke,
@@ -29,15 +29,15 @@ const SCAN_LINES = [
 
 function getLiveRoast(strokes: Stroke[], aspectRatio?: number, valid?: boolean): string {
   if (strokes.length === 0) return '落笔即开始 10 秒倒计时，Poteto #01 正在围观你的画工。';
-  if (!valid) return 'Poteto #01 皱眉：这轮廓还没闭合，淀粉要漏出来了！';
+  if (!valid) return '轮廓还没闭合，淀粉要漏出来了！让首尾再靠近一点。';
   if (strokes.length === 1) {
-    if (aspectRatio && aspectRatio > 1.35) return 'Poteto #01：这是一颗被生活压扁的宽体土豆，快给它点眼睛！';
-    if (aspectRatio && aspectRatio < 0.78) return 'Poteto #01：瘦长型高个子土豆，快补两笔眼神！';
-    return 'Poteto #01：圆得像颗鱼丸！快点上眼睛和表情赋予灵魂！';
+    if (aspectRatio && aspectRatio > 1.35) return '被生活压扁的宽体土豆，快给它点上眼睛！';
+    if (aspectRatio && aspectRatio < 0.78) return '修长抽象派土豆，快补两笔传神的眼神！';
+    return '圆得像颗鱼丸！快点上眼睛和表情赋予灵魂！';
   }
-  if (strokes.length === 2) return 'Poteto #01：嗯…单眼皮土豆有点独眼海盗的意思了。';
-  if (strokes.length === 3) return 'Poteto #01：这眼神已经开始嫌弃我了，还能再补 1 笔嘴！';
-  return 'Poteto #01：4 笔封神！堪称当代马铃薯文艺复兴！';
+  if (strokes.length === 2) return '嗯…单眼皮土豆有点独眼海盗的意思了。';
+  if (strokes.length === 3) return '这眼神已经开始嫌弃我了，还能再补 1 笔嘴！';
+  return '4 笔封神！堪称当代马铃薯文艺复兴！';
 }
 
 export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
@@ -190,7 +190,7 @@ export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
           passed: true,
           humanScore,
           potatoScore: 18,
-          summary: `${strokes.length} 笔完成「${prompt.badgeText}」（${geometryRoast}），已印作证件照！`,
+          summary: `${strokes.length} 笔完成「${prompt.badgeText}」（${geometryRoast}）。`,
         },
         pathData
       );
@@ -206,27 +206,27 @@ export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 10, scale: 0.99 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.22 }}
-      className="overflow-hidden rounded-2xl border border-[#D4D4D8] bg-white shadow-[0_12px_36px_rgba(0,0,0,0.08)]"
+      className="overflow-hidden rounded-3xl border border-[#E4E4E7] bg-white shadow-[0_12px_36px_rgba(0,0,0,0.06)]"
     >
-      {/* Iconic Blue Verification Header */}
-      <div className="bg-[#1A73E8] px-5 py-4 text-white">
-        <div className="flex items-center justify-between text-[11px] font-medium text-white/80">
+      {/* Clean Blue Verification Header */}
+      <div className="bg-[#1A73E8] px-6 py-5 text-white">
+        <div className="flex items-center justify-between text-xs font-medium text-white/80">
           <span>第 3 关 / 共 3 关 · 手绘证件照</span>
-          <span className="font-mono">
-            {strokes.length}/{MAX_STROKES} 笔 · {timeLeft.toFixed(1)}s
+          <span className="font-mono tabular-nums">
+            {strokes.length} / {MAX_STROKES} 笔 · {timeLeft.toFixed(1)}s
           </span>
         </div>
-        <h2 className="mt-1 font-display text-lg font-bold tracking-tight sm:text-xl">
+        <h2 className="mt-1.5 font-display text-xl font-bold tracking-tight">
           {prompt.title}
         </h2>
-        <p className="mt-0.5 text-xs text-white/85">{prompt.hint}</p>
+        <p className="mt-1 text-xs text-white/85">{prompt.hint}</p>
       </div>
 
-      {/* Thin Countdown Progress Bar */}
-      <div className="h-1 w-full bg-[#E4E4E7]">
+      {/* Countdown Progress Line */}
+      <div className="h-1 w-full bg-[#F4F4F5]">
         <div
           className={`h-full transition-all duration-100 ${
             timeLeft <= 2.5 && timerStarted ? 'bg-[#DC2626]' : 'bg-[#60A5FA]'
@@ -235,17 +235,16 @@ export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
         />
       </div>
 
-      <div className="p-4 sm:p-5">
-        {/* Live Poteto #01 Roast Bubble */}
-        <div className="mb-3 rounded-xl bg-[#FAFAFB] px-3 py-2 text-center text-xs font-medium text-[#52525B] ring-1 ring-[#F4F4F5]">
+      <div className="p-5 sm:p-6">
+        {/* Live Roast Strip */}
+        <p className="mb-4 text-center text-xs font-medium text-[#52525B]">
           {scanning ? SCAN_LINES[scanStep] : liveRoast}
-        </div>
+        </p>
 
-        {/* Crisp Vector Drawing Pad */}
-        <div className="relative mx-auto aspect-square w-full max-w-[300px] overflow-hidden rounded-2xl border-2 border-[#E4E4E7] bg-[#FAFAFB] shadow-inner">
-          <div className="pointer-events-none absolute inset-6 rounded-full border border-dashed border-[#D4D4D8]" />
+        {/* Spacious Vector Drawing Pad */}
+        <div className="relative mx-auto aspect-square w-full max-w-[320px] overflow-hidden rounded-2xl border-2 border-[#E4E4E7] bg-[#FAFAFB]">
+          <div className="pointer-events-none absolute inset-7 rounded-full border border-dashed border-[#D4D4D8]" />
 
-          {/* Forensic Laser Scan Animation on Submit */}
           {scanning && (
             <motion.div
               initial={{ top: '0%' }}
@@ -257,9 +256,9 @@ export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
 
           {strokes.length === 0 && activeStroke.length === 0 && (
             <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center text-[#A1A1AA]">
-              <Pencil className="mb-2 h-6 w-6 opacity-60" strokeWidth={1.8} />
-              <span className="text-xs font-semibold text-[#71717A]">在此处一笔画出土豆轮廓</span>
-              <span className="mt-0.5 text-[11px]">最多 4 笔 · 自动矢量压缩</span>
+              <Pencil className="mb-2.5 h-6 w-6 opacity-55" strokeWidth={1.75} />
+              <span className="text-xs font-semibold text-[#71717A]">一笔画出土豆轮廓</span>
+              <span className="mt-1 text-[11px]">最多 4 笔 · 自动矢量压缩</span>
             </div>
           )}
 
@@ -296,24 +295,17 @@ export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
           </svg>
 
           {strokes.length > 0 && !scanning && (
-            <div className="pointer-events-none absolute inset-x-3 bottom-2.5 flex items-center justify-between text-[10px]">
+            <div className="pointer-events-none absolute inset-x-3 bottom-3 flex items-center justify-between text-[11px]">
               <span
-                className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-medium ${
+                className={`rounded-full px-2.5 py-0.5 font-medium ${
                   liveCheck?.valid
                     ? 'bg-[#DCFCE7] text-[#15803D]'
                     : 'bg-[#FEF3C7] text-[#B45309]'
                 }`}
               >
-                {liveCheck?.valid ? (
-                  <>
-                    <CheckCircle2 className="h-3 w-3" strokeWidth={2.2} />
-                    <span>轮廓合格，可随时出证</span>
-                  </>
-                ) : (
-                  <span>轮廓需近似闭合</span>
-                )}
+                {liveCheck?.valid ? '轮廓合格' : '需近似闭合'}
               </span>
-              <span className="rounded-full bg-white/90 px-2 py-0.5 font-mono text-[#71717A] shadow-2xs">
+              <span className="rounded-full bg-white/90 px-2.5 py-0.5 font-mono text-[#71717A] ring-1 ring-[#E4E4E7]">
                 {currentBytes} B
               </span>
             </div>
@@ -321,30 +313,31 @@ export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
         </div>
 
         {errorMsg && (
-          <div className="mt-3 flex items-center gap-2 rounded-xl bg-[#FEF2F2] px-3 py-2 text-xs font-medium text-[#B91C1C] ring-1 ring-[#FECACA]">
-            <AlertCircle className="h-4 w-4 shrink-0" strokeWidth={2} />
-            <span>{errorMsg}</span>
+          <div className="mt-4 rounded-xl bg-[#FEF2F2] px-4 py-2.5 text-center text-xs font-medium text-[#B91C1C] ring-1 ring-[#FECACA]">
+            {errorMsg}
           </div>
         )}
 
-        <div className="mt-4 flex items-center justify-between gap-2 border-t border-[#F4F4F5] pt-3.5">
-          <div className="flex items-center gap-1.5">
+        <div className="mt-5 flex items-center justify-between gap-3 border-t border-[#F4F4F5] pt-4">
+          <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={handleUndo}
               disabled={strokes.length === 0 || scanning}
-              className="btn btn-sm rounded-xl border-[#E4E4E7] bg-white text-xs text-[#52525B] hover:bg-[#FAFAFB] disabled:opacity-40"
+              aria-label="撤销上一笔"
+              className="btn btn-sm h-10 rounded-xl border-[#E4E4E7] bg-white px-3 text-xs text-[#52525B] hover:bg-[#FAFAFB] disabled:opacity-40"
             >
-              <Undo2 className="h-3.5 w-3.5" strokeWidth={2} />
+              <Undo2 className="h-3.5 w-3.5" strokeWidth={1.75} />
               <span>撤销</span>
             </button>
             <button
               type="button"
               onClick={handleReset}
               disabled={(strokes.length === 0 && !timerStarted) || scanning}
-              className="btn btn-sm rounded-xl border-[#E4E4E7] bg-white text-xs text-[#52525B] hover:bg-[#FAFAFB] disabled:opacity-40"
+              aria-label="重新绘制"
+              className="btn btn-sm h-10 rounded-xl border-[#E4E4E7] bg-white px-3 text-xs text-[#52525B] hover:bg-[#FAFAFB] disabled:opacity-40"
             >
-              <RotateCcw className="h-3.5 w-3.5" strokeWidth={2} />
+              <RotateCcw className="h-3.5 w-3.5" strokeWidth={1.75} />
               <span>重画</span>
             </button>
           </div>
@@ -353,23 +346,17 @@ export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
             type="button"
             onClick={handleSubmit}
             disabled={strokes.length === 0 || scanning}
-            className={`btn btn-sm h-10 rounded-xl border-0 px-5 text-xs font-bold text-white shadow-xs disabled:bg-[#E4E4E7] disabled:text-[#A1A1AA] ${
+            className={`btn h-10 rounded-xl border-0 px-6 text-sm font-semibold text-white disabled:bg-[#E4E4E7] disabled:text-[#A1A1AA] ${
               liveCheck?.valid
                 ? 'bg-[#16A34A] hover:bg-[#15803D]'
                 : 'bg-[#1A73E8] hover:bg-[#1557B0]'
             }`}
           >
-            {scanning ? (
-              <>
-                <ScanLine className="h-3.5 w-3.5 animate-pulse" strokeWidth={2.2} />
-                <span>AI 鉴定中…</span>
-              </>
-            ) : (
-              <>
-                <span>{timeLeft <= 0 && liveCheck?.valid ? '时间到，立即出证' : '封存并出证'}</span>
-                <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.2} />
-              </>
-            )}
+            {scanning
+              ? 'AI 鉴定中…'
+              : timeLeft <= 0 && liveCheck?.valid
+                ? '时间到，立即出证'
+                : '封存并出证'}
           </button>
         </div>
       </div>

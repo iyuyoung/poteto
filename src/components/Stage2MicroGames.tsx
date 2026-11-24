@@ -1019,68 +1019,88 @@ export const Stage2MicroGames: React.FC<Stage2Props> = ({ game, onComplete }) =>
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 10, scale: 0.99 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.22 }}
-      className="overflow-hidden rounded-2xl border border-[#D4D4D8] bg-white shadow-[0_12px_36px_rgba(0,0,0,0.08)]"
+      className="overflow-hidden rounded-3xl border border-[#E4E4E7] bg-white shadow-[0_12px_36px_rgba(0,0,0,0.06)]"
     >
-      {/* Iconic Blue Verification Header */}
-      <div className="bg-[#1A73E8] px-5 py-4 text-white">
-        <div className="text-[11px] font-medium text-white/80">
+      {/* Clean Blue Verification Header */}
+      <div className="bg-[#1A73E8] px-6 py-5 text-white">
+        <div className="text-xs font-medium text-white/80">
           第 2 关 / 共 3 关 · 反直觉交互审验
         </div>
-        <h2 className="mt-1 font-display text-lg font-bold tracking-tight sm:text-xl">
+        <h2 className="mt-1.5 font-display text-xl font-bold tracking-tight">
           {game.title}
         </h2>
-        <p className="mt-0.5 text-xs text-white/85">{game.instruction}</p>
+        <p className="mt-1 text-xs text-white/85">{game.instruction}</p>
       </div>
 
-      <div className="p-4 sm:p-5">
+      <div className="p-5 sm:p-6">
         {!revealedResult ? (
           <>
-            {renderGame()}
-            <p className="mt-3 rounded-xl bg-[#FAFAFB] px-3 py-2 text-[11px] text-[#71717A]">
+            <div className="min-h-[210px]">{renderGame()}</div>
+            <p className="mt-4 rounded-xl bg-[#FAFAFB] px-4 py-2.5 text-xs text-[#71717A]">
               对照组备注：{game.potatoQuip}
             </p>
           </>
         ) : (
           <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
+            initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="flex flex-col items-center py-6 text-center"
+            className="flex flex-col items-center py-8 text-center"
           >
             <div
-              className={`mb-3 flex h-12 w-12 items-center justify-center rounded-full ${
-                revealedResult.passed
-                  ? 'bg-[#DCFCE7] text-[#16A34A]'
-                  : 'bg-[#FEE2E2] text-[#DC2626]'
+              className={`mb-4 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-sm ${
+                revealedResult.passed ? 'bg-[#16A34A]' : 'bg-[#DC2626]'
               }`}
             >
               {revealedResult.passed ? (
-                <CheckCircle2 className="h-7 w-7" strokeWidth={2.2} />
+                <CheckCircle2 className="h-7 w-7" strokeWidth={2} />
               ) : (
-                <XCircle className="h-7 w-7" strokeWidth={2.2} />
+                <XCircle className="h-7 w-7" strokeWidth={2} />
               )}
             </div>
-            <h3 className="font-display text-lg font-bold text-[#18181B]">
-              {revealedResult.passed ? '本关过关！' : '被土豆反杀！'}
-            </h3>
-            <p className="mt-1.5 max-w-sm text-xs leading-relaxed text-[#52525B]">
+
+            <span
+              className={`rounded-full px-3 py-0.5 font-mono text-[11px] font-bold tracking-wider uppercase ${
+                revealedResult.passed
+                  ? 'bg-[#DCFCE7] text-[#15803D]'
+                  : 'bg-[#FEE2E2] text-[#DC2626]'
+              }`}
+            >
+              {revealedResult.passed ? 'PASS · 过关' : 'FAIL · 被土豆反杀'}
+            </span>
+
+            <p className="mt-3 max-w-md text-sm font-medium leading-relaxed text-[#18181B]">
               {revealedResult.summary}
             </p>
-            <div className="mt-3 rounded-full bg-[#F4F4F5] px-3.5 py-1 font-mono text-xs font-semibold text-[#3F3F46]">
-              本关得分：你 +{revealedResult.humanScore} · 土豆 +{revealedResult.potatoScore}
+
+            {/* Clean Side-by-Side Score Delta */}
+            <div className="mt-5 flex items-center gap-3">
+              <div className="rounded-xl bg-[#EFF6FF] px-4 py-2 text-center">
+                <span className="block text-[10px] font-medium text-[#3B82F6]">你本关得分</span>
+                <span className="font-mono text-lg font-bold text-[#1D4ED8] tabular-nums">
+                  +{revealedResult.humanScore}
+                </span>
+              </div>
+              <span className="font-mono text-xs font-bold text-[#D4D4D8]">VS</span>
+              <div className="rounded-xl bg-[#FAFAFB] px-4 py-2 text-center ring-1 ring-[#E4E4E7]">
+                <span className="block text-[10px] font-medium text-[#71717A]">Poteto #01</span>
+                <span className="font-mono text-lg font-bold text-[#18181B] tabular-nums">
+                  +{revealedResult.potatoScore}
+                </span>
+              </div>
             </div>
+
             <button
               type="button"
               onClick={() => {
                 playTick();
                 onComplete(revealedResult);
               }}
-              className="btn mt-5 rounded-xl border-0 bg-[#18181B] px-6 text-xs font-bold text-white hover:bg-[#27272A]"
+              className="btn mt-6 h-11 rounded-xl border-0 bg-[#18181B] px-7 text-sm font-semibold text-white hover:bg-[#27272A]"
             >
-              <span>进入第 3 关：手绘自证</span>
-              <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
+              进入第 3 关：手绘自证
             </button>
           </motion.div>
         )}

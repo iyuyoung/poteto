@@ -2,10 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import {
   Clock,
-  Infinity as InfinityIcon,
   Loader2,
-  RefreshCw,
-  Sparkles,
+  ShieldCheck,
   Volume2,
   VolumeX,
 } from 'lucide-react';
@@ -220,61 +218,61 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
         ? activePayload.stage2Game.potatoStatus
         : '试图用根须握笔（失败中）';
 
+  const containerWidth =
+    phase === 'entry'
+      ? 'max-w-[460px]'
+      : phase === 'result'
+        ? 'max-w-[600px]'
+        : 'max-w-[540px]';
+
   return (
-    <div className={`mx-auto w-full transition-all ${phase === 'result' ? 'max-w-[520px]' : 'max-w-[440px]'}`}>
+    <div className={`mx-auto w-full transition-all duration-200 ${containerWidth}`}>
       {/* Returning-User Hook Toast */}
       {yesterdayHook?.hasYesterday && phase === 'entry' && (
         <motion.div
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-5 flex items-center gap-3 rounded-2xl border border-[#FED7AA] bg-[#FFF7ED] px-3.5 py-2.5 shadow-2xs"
+          className="mb-6 flex items-center gap-3 rounded-2xl border border-[#FED7AA] bg-[#FFF7ED] px-4 py-3"
         >
-          {yesterdayHook.drawing ? (
+          {yesterdayHook.drawing && (
             <div className="h-10 w-10 shrink-0 rounded-xl bg-white p-1 ring-1 ring-[#FDBA74]/50">
               <PotatoSvg pathData={yesterdayHook.drawing} className="h-full w-full" />
             </div>
-          ) : (
-            <Sparkles className="h-4 w-4 shrink-0 text-[#EA580C]" strokeWidth={2} />
           )}
-          <p className="text-xs leading-snug text-[#9A3412]">
-            <span className="font-bold">昨日战报：</span>
+          <p className="text-xs leading-relaxed text-[#9A3412]">
+            <span className="font-bold">昨日回访战报：</span>
             {yesterdayHook.message}
           </p>
         </motion.div>
       )}
 
-      {/* Compact Top Meta Strip */}
-      <div className="mb-3 flex items-center justify-between gap-2 px-0.5">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 font-mono text-[11px] font-bold text-[#18181B] shadow-2xs ring-1 ring-[#E4E4E7]">
-          {mode === 'endless' ? (
-            <>
-              <InfinityIcon className="h-3.5 w-3.5 text-[#1A73E8]" strokeWidth={2.2} />
-              <span>Endless #{endlessRound}</span>
-            </>
-          ) : (
-            <span>Poteto Audit #{formatAuditNumber(activePayload.auditNumber)}</span>
-          )}
+      {/* Clean Uncluttered Status Strip */}
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <span className="font-mono text-xs font-bold tracking-tight text-[#52525B]">
+          {mode === 'endless'
+            ? `ENDLESS AUDIT #${endlessRound}`
+            : `POTETO AUDIT #${formatAuditNumber(activePayload.auditNumber)}`}
         </span>
 
         <div className="flex items-center gap-2">
-          <div
-            className="inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 font-mono text-[11px] font-medium text-[#52525B] shadow-2xs ring-1 ring-[#E4E4E7]"
+          <span
+            className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 font-mono text-[11px] font-medium text-[#52525B] ring-1 ring-[#E4E4E7] tabular-nums"
             title="距离今日人类资格过期剩余时间"
           >
-            <Clock className="h-3 w-3 text-[#71717A]" strokeWidth={2} />
-            <span>{countdown}</span>
-          </div>
+            <Clock className="h-3.5 w-3.5 text-[#A1A1AA]" strokeWidth={1.75} />
+            {countdown}
+          </span>
 
           <button
             type="button"
             onClick={toggleMute}
             aria-label={muted ? '开启音效' : '静音'}
-            className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-[#71717A] shadow-2xs ring-1 ring-[#E4E4E7] transition hover:text-[#09090B]"
+            className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-[#71717A] ring-1 ring-[#E4E4E7] transition hover:text-[#09090B]"
           >
             {muted ? (
-              <VolumeX className="h-3.5 w-3.5" strokeWidth={2} />
+              <VolumeX className="h-3.5 w-3.5" strokeWidth={1.75} />
             ) : (
-              <Volume2 className="h-3.5 w-3.5" strokeWidth={2} />
+              <Volume2 className="h-3.5 w-3.5" strokeWidth={1.75} />
             )}
           </button>
         </div>
@@ -282,7 +280,7 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
 
       {/* Persistent Control Potato HUD during Stages 1-3 */}
       {(phase === 'stage1' || phase === 'stage2' || phase === 'stage3') && (
-        <div className="mb-3">
+        <div className="mb-4">
           <CompetitorHud
             humanScore={humanScore}
             potatoScore={potatoScore}
@@ -298,20 +296,19 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.25 }}
-          className="flex flex-col items-center py-6 text-center"
+          className="flex flex-col items-center py-8 text-center"
         >
           <h1 className="font-display text-3xl font-extrabold tracking-tight text-[#09090B] sm:text-4xl">
             证明你是人类
           </h1>
-          <p className="mt-2 max-w-xs text-sm text-[#71717A]">
+          <p className="mt-3 max-w-sm text-sm leading-relaxed text-[#71717A]">
             90 秒三关全球同题年审，别输给北海道对照组土豆。
           </p>
 
-          {/* Iconic Google reCAPTCHA v2-style Interactive Box with Peeking Potato Twist */}
-          <div className="group/box relative mt-10 w-full max-w-[330px]">
-            {/* Mischievous Poteto #01 peeks up from behind the CAPTCHA box on hover/check! */}
+          {/* Iconic Google reCAPTCHA v2-style Interactive Box with Peeking Potato */}
+          <div className="group/box relative mt-12 w-full max-w-[340px]">
             <motion.div
-              animate={checkingBox ? { y: -26, rotate: -6 } : { y: -12 }}
+              animate={checkingBox ? { y: -28, rotate: -6 } : { y: -12 }}
               className="pointer-events-none absolute -top-6 right-8 z-0 transition-transform duration-300 group-hover/box:-translate-y-4"
             >
               <OfficialPotatoMascot className="h-14 w-14 drop-shadow-xs" />
@@ -322,34 +319,27 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
               onClick={handleCheckboxClick}
               disabled={checkingBox}
               aria-label="勾选我不是机器人，开始今日人类资格年审"
-              className="group relative z-10 flex w-full items-center justify-between rounded-[4px] border border-[#D3D3D3] bg-[#F9F9F9] px-4 py-3.5 text-left shadow-[0_2px_6px_rgba(0,0,0,0.08)] transition-all hover:border-[#B8B8B8] hover:bg-white hover:shadow-[0_6px_18px_rgba(0,0,0,0.1)] active:scale-[0.99]"
+              className="group relative z-10 flex w-full items-center justify-between rounded-md border border-[#D3D3D3] bg-[#F9F9F9] px-5 py-4 text-left shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-all hover:border-[#B8B8B8] hover:bg-white hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] active:scale-[0.99]"
             >
-              <div className="flex items-center gap-3.5">
+              <div className="flex items-center gap-4">
                 <span
-                  className={`flex h-7 w-7 items-center justify-center rounded-[2px] border-2 transition-colors ${
+                  className={`flex h-7 w-7 items-center justify-center rounded-[3px] border-2 transition-colors ${
                     checkingBox
                       ? 'border-transparent bg-transparent'
-                      : 'border-[#C1C1C1] bg-white group-hover:border-[#9E9E9E]'
+                      : 'border-[#C1C1C1] bg-white group-hover:border-[#8F8F8F]'
                   }`}
                 >
                   {checkingBox && (
-                    <Loader2 className="h-6 w-6 animate-spin text-[#1A73E8]" strokeWidth={2.5} />
+                    <Loader2 className="h-6 w-6 animate-spin text-[#1A73E8]" strokeWidth={2.2} />
                   )}
                 </span>
-                <div>
-                  <span className="block text-[15px] font-medium text-[#202124]">
-                    {checkingBox ? '正在检测淀粉含量…' : '我不是机器人'}
-                  </span>
-                </div>
+                <span className="text-[15px] font-medium text-[#202124]">
+                  {checkingBox ? '正在检测淀粉含量…' : '我不是机器人'}
+                </span>
               </div>
 
               <div className="flex flex-col items-center text-center">
-                <RefreshCw
-                  className={`h-6 w-6 text-[#1A73E8] transition-transform duration-500 ${
-                    checkingBox ? 'rotate-180' : 'group-hover:rotate-45'
-                  }`}
-                  strokeWidth={2}
-                />
+                <ShieldCheck className="h-6 w-6 text-[#1A73E8]" strokeWidth={1.75} />
                 <span className="mt-1 text-[9px] font-semibold tracking-tight text-[#555555]">
                   rePOTETO
                 </span>
@@ -358,8 +348,8 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
             </button>
           </div>
 
-          <p className="mt-6 font-mono text-[11px] text-[#A1A1AA]">
-            免注册 · 全球每日同题 · 距离今日资格过期 {countdown}
+          <p className="mt-8 font-mono text-xs text-[#A1A1AA]">
+            免注册 · 每日 UTC 00:00 全球同题刷新
           </p>
         </motion.section>
       )}
