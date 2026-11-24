@@ -10,7 +10,7 @@ import {
   VolumeX,
 } from 'lucide-react';
 import { CompetitorHud } from './CompetitorHud';
-import { PotatoSvg } from './PotatoSvg';
+import { OfficialPotatoMascot, PotatoSvg } from './PotatoSvg';
 import { Stage1UgcGrid } from './Stage1UgcGrid';
 import { Stage2MicroGames } from './Stage2MicroGames';
 import { Stage3DrawCanvas } from './Stage3DrawCanvas';
@@ -307,14 +307,22 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
             90 秒三关全球同题年审，别输给北海道对照组土豆。
           </p>
 
-          {/* Iconic Google reCAPTCHA v2-style Interactive Box */}
-          <div className="mt-8 w-full max-w-[330px]">
+          {/* Iconic Google reCAPTCHA v2-style Interactive Box with Peeking Potato Twist */}
+          <div className="group/box relative mt-10 w-full max-w-[330px]">
+            {/* Mischievous Poteto #01 peeks up from behind the CAPTCHA box on hover/check! */}
+            <motion.div
+              animate={checkingBox ? { y: -26, rotate: -6 } : { y: -12 }}
+              className="pointer-events-none absolute -top-6 right-8 z-0 transition-transform duration-300 group-hover/box:-translate-y-4"
+            >
+              <OfficialPotatoMascot className="h-14 w-14 drop-shadow-xs" />
+            </motion.div>
+
             <button
               type="button"
               onClick={handleCheckboxClick}
               disabled={checkingBox}
               aria-label="勾选我不是机器人，开始今日人类资格年审"
-              className="group flex w-full items-center justify-between rounded-[4px] border border-[#D3D3D3] bg-[#F9F9F9] px-4 py-3.5 text-left shadow-[0_2px_6px_rgba(0,0,0,0.08)] transition-all hover:border-[#B8B8B8] hover:bg-white hover:shadow-[0_4px_14px_rgba(0,0,0,0.1)] active:scale-[0.99]"
+              className="group relative z-10 flex w-full items-center justify-between rounded-[4px] border border-[#D3D3D3] bg-[#F9F9F9] px-4 py-3.5 text-left shadow-[0_2px_6px_rgba(0,0,0,0.08)] transition-all hover:border-[#B8B8B8] hover:bg-white hover:shadow-[0_6px_18px_rgba(0,0,0,0.1)] active:scale-[0.99]"
             >
               <div className="flex items-center gap-3.5">
                 <span
@@ -328,9 +336,11 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
                     <Loader2 className="h-6 w-6 animate-spin text-[#1A73E8]" strokeWidth={2.5} />
                   )}
                 </span>
-                <span className="text-[15px] font-medium text-[#202124]">
-                  我不是机器人
-                </span>
+                <div>
+                  <span className="block text-[15px] font-medium text-[#202124]">
+                    {checkingBox ? '正在检测淀粉含量…' : '我不是机器人'}
+                  </span>
+                </div>
               </div>
 
               <div className="flex flex-col items-center text-center">

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Check, CheckCircle2, Flag, ShieldAlert, XCircle } from 'lucide-react';
+import { ArrowRight, Check, CheckCircle2, Flag, ScanLine, ShieldAlert, XCircle } from 'lucide-react';
 import { PotatoSvg } from './PotatoSvg';
 import { playFail, playPop, playSuccess, playTick } from '../lib/sfx';
 import type { PotatoDrawing, Stage1Prompt, StageResult } from '../lib/types';
@@ -12,6 +12,13 @@ interface Stage1UgcGridProps {
   onComplete: (result: StageResult) => void;
 }
 
+const DECOY_WHISPERS = [
+  '别看我，我真是土豆',
+  '绝对不是石头',
+  '100% 合法淀粉',
+  '请忽略我的六条边',
+];
+
 export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
   prompt,
   initialDrawings,
@@ -22,10 +29,24 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
   const [reserves, setReserves] = useState<PotatoDrawing[]>(reserveDrawings);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [reportNotice, setReportNotice] = useState<string | null>(null);
+  const [twistBanner, setTwistBanner] = useState<string | null>(null);
+  const [didTwist, setDidTwist] = useState(false);
+  const [scanning, setScanning] = useState(false);
   const [revealedResult, setRevealedResult] = useState<StageResult | null>(null);
+  const [decoyWhisperIdx, setDecoyWhisperIdx] = useState(0);
+
+  // Subtle suspicious decoy whisper rotation
+  useEffect(() => {
+    if (revealedResult) return;
+    const id = window.setInterval(() => {
+      setDecoyWhisperIdx((i) => (i + 1) % DECOY_WHISPERS.length);
+    }, 2600);
+    return () => window.clearInterval(id);
+  }, [revealedResult]);
 
   const toggleSelect = (id: string) => {
-    if (revealedResult) return;
+    if (revealedResult || scanning) return;
+
     setSelectedIds((prev) => {
       if (prev.includes(id)) {
         playTick();
@@ -33,13 +54,37 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
       }
       const next = prev.length >= prompt.targetCount ? [...prev.slice(1), id] : [...prev, id];
       playPop(next.length - 1);
+
+      // Mid-selection Plot Twist! After picking the 2nd potato, Poteto #01 panics and swaps two unselected cells
+      if (next.length === 2 && !didTwist) {
+        setDidTwist(true);
+        window.setTimeout(() => {
+          setGrid((cur) => {
+            const unselectedIndices = cur
+              .map((d, idx) => ({ id: d.id, idx }))
+              .filter((item) => !next.includes(item.id));
+            if (unselectedIndices.length < 2) return cur;
+            const a = unselectedIndices[0].idx;
+            const b = unselectedIndices[unselectedIndices.length - 1].idx;
+            const copy = [...cur];
+            const tmp = copy[a];
+            copy[a] = copy[b];
+            copy[b] = tmp;
+            return copy;
+          });
+          playTick();
+          setTwistBanner('Poteto #01 急了！它偷偷把两颗土豆换了位置！');
+          window.setTimeout(() => setTwistBanner(null), 2600);
+        }, 220);
+      }
+
       return next;
     });
   };
 
   const handleReport = async (e: React.MouseEvent, drawing: PotatoDrawing, idx: number) => {
     e.stopPropagation();
-    if (revealedResult) return;
+    if (revealedResult || scanning) return;
     playTick();
 
     setSelectedIds((prev) => prev.filter((id) => id !== drawing.id));
@@ -52,7 +97,7 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
       setReportNotice('已记录举报，感谢维护土豆社区纯净度。');
     }
 
-    window.setTimeout(() => setReportNotice(null), 2800);
+    window.setTimeout(() => setReportNotice(null), 2600);
 
     fetch('/api/report', {
       method: 'POST',
@@ -62,7 +107,10 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
   };
 
   const handleVerify = () => {
-    if (selectedIds.length < prompt.targetCount || revealedResult) return;
+    if (selectedIds.length < prompt.targetCount || revealedResult || scanning) return;
+
+    playTick();
+    setScanning(true);
 
     fetch('/api/vote', {
       method: 'POST',
@@ -70,24 +118,25 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
       body: JSON.stringify({ drawingIds: selectedIds }),
     }).catch(() => {});
 
-    const pickedDecoy = grid.some((d) => d.isOfficialDecoy && selectedIds.includes(d.id));
-    if (pickedDecoy) {
-      playFail();
-    } else {
-      playSuccess();
-    }
+    window.setTimeout(() => {
+      setScanning(false);
+      const pickedDecoy = grid.some((d) => d.isOfficialDecoy && selectedIds.includes(d.id));
+      if (pickedDecoy) {
+        playFail();
+      } else {
+        playSuccess();
+      }
 
-    const result: StageResult = {
-      stage: 1,
-      passed: !pickedDecoy,
-      humanScore: pickedDecoy ? 20 : 34,
-      potatoScore: 26,
-      summary: pickedDecoy
-        ? '破防了！你把官方混入的「六边形伪装石块」当成了土豆。'
-        : '火眼金睛！精准避开官方伪装石块，认出了网友的灵魂画作。',
-    };
-
-    setRevealedResult(result);
+      setRevealedResult({
+        stage: 1,
+        passed: !pickedDecoy,
+        humanScore: pickedDecoy ? 18 : 34,
+        potatoScore: 26,
+        summary: pickedDecoy
+          ? '破防了！你把混进来的「六边形鹅卵石（淀粉含量 0%）」当成了土豆！'
+          : '火眼金睛！避开了伪装石块，Poteto #01 用根须乱压只蒙对了 1 格。',
+      });
+    }, 680);
   };
 
   return (
@@ -112,23 +161,45 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
       </div>
 
       {/* Grid Body */}
-      <div className="p-3 sm:p-4">
+      <div className="relative p-3 sm:p-4">
+        {twistBanner && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-2.5 flex items-center justify-center gap-1.5 rounded-xl bg-[#FFF7ED] px-3 py-1.5 text-xs font-bold text-[#C2410C] ring-1 ring-[#FDBA74]"
+          >
+            <span>{twistBanner}</span>
+          </motion.div>
+        )}
+
         {reportNotice && (
-          <div className="mb-3 flex items-center gap-2 rounded-xl bg-[#FFFBEB] px-3 py-2 text-xs font-medium text-[#92400E] ring-1 ring-[#FDE68A]">
+          <div className="mb-2.5 flex items-center gap-2 rounded-xl bg-[#FFFBEB] px-3 py-2 text-xs font-medium text-[#92400E] ring-1 ring-[#FDE68A]">
             <ShieldAlert className="h-3.5 w-3.5 shrink-0" strokeWidth={2} />
             <span>{reportNotice}</span>
           </div>
         )}
 
-        <div className="grid grid-cols-3 gap-2">
+        <div className="relative grid grid-cols-3 gap-2">
+          {/* Forensic Laser Sweep during Verification */}
+          {scanning && (
+            <motion.div
+              initial={{ top: '0%' }}
+              animate={{ top: ['0%', '92%', '0%'] }}
+              transition={{ duration: 0.65, ease: 'easeInOut' }}
+              className="pointer-events-none absolute inset-x-0 z-20 h-1 bg-[#1A73E8] shadow-[0_0_16px_4px_rgba(26,115,232,0.65)]"
+            />
+          )}
+
           {grid.map((drawing, idx) => {
             const isSelected = selectedIds.includes(drawing.id);
             const isDecoy = Boolean(drawing.isOfficialDecoy);
             const showDecoyAlert = Boolean(revealedResult && isDecoy);
 
             return (
-              <div
-                key={`${drawing.id}-${idx}`}
+              <motion.div
+                layout
+                transition={{ type: 'spring', stiffness: 420, damping: 28 }}
+                key={drawing.id}
                 role="button"
                 tabIndex={0}
                 onClick={() => toggleSelect(drawing.id)}
@@ -139,7 +210,7 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
                   }
                 }}
                 aria-pressed={isSelected}
-                className={`group relative flex aspect-square cursor-pointer flex-col items-center justify-center rounded-xl border-2 p-1.5 transition-all select-none ${
+                className={`group relative flex aspect-square cursor-pointer flex-col items-center justify-center rounded-xl border-2 p-1.5 transition-colors select-none ${
                   showDecoyAlert
                     ? 'border-[#DC2626] bg-[#FEF2F2]'
                     : isSelected
@@ -147,21 +218,18 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
                       : 'border-[#F4F4F5] bg-[#FAFAFB] hover:border-[#D4D4D8] hover:bg-white'
                 }`}
               >
-                {/* Selection checkmark */}
                 {isSelected && !showDecoyAlert && (
                   <span className="absolute left-1.5 top-1.5 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-[#1A73E8] text-white shadow-xs">
                     <Check className="h-3 w-3" strokeWidth={3} />
                   </span>
                 )}
 
-                {/* Decoy reveal badge */}
                 {showDecoyAlert && (
                   <span className="absolute inset-x-1 top-1 z-10 rounded-md bg-[#DC2626] px-1 py-0.5 text-center text-[10px] font-bold text-white shadow-xs">
-                    官方伪装项
+                    鹅卵石卧底！
                   </span>
                 )}
 
-                {/* Report flag icon */}
                 {!isDecoy && !revealedResult && (
                   <button
                     type="button"
@@ -174,20 +242,38 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
                   </button>
                 )}
 
-                <PotatoSvg
-                  pathData={drawing.pathData}
-                  className="h-[74%] w-[74%] transition-transform duration-150 group-hover:scale-105"
-                  fillTint={isDecoy ? '#E4E4E7' : '#F6DFC0'}
-                  strokeColor="#18181B"
-                  strokeWidth={5.2}
-                />
+                <motion.div
+                  animate={
+                    isDecoy && !revealedResult
+                      ? { rotate: [0, -2, 2, 0] }
+                      : undefined
+                  }
+                  transition={
+                    isDecoy && !revealedResult
+                      ? { repeat: Infinity, repeatDelay: 2.2, duration: 0.35 }
+                      : undefined
+                  }
+                  className="flex h-[74%] w-[74%] items-center justify-center"
+                >
+                  <PotatoSvg
+                    pathData={drawing.pathData}
+                    className="h-full w-full transition-transform duration-150 group-hover:scale-105"
+                    fillTint={isDecoy ? '#E4E4E7' : '#F6DFC0'}
+                    strokeColor="#18181B"
+                    strokeWidth={5.2}
+                  />
+                </motion.div>
 
                 <span className="max-w-full truncate px-1 text-[10px] font-medium text-[#71717A]">
-                  {revealedResult && !isDecoy
-                    ? `${Math.min(92, 28 + ((drawing.fooledCount ?? 30) % 58))}% 人选`
-                    : drawing.caption || `网友画作 #${idx + 1}`}
+                  {revealedResult
+                    ? isDecoy
+                      ? '淀粉含量 0%'
+                      : `${Math.min(92, 28 + ((drawing.fooledCount ?? 30) % 58))}% 人选`
+                    : isDecoy
+                      ? DECOY_WHISPERS[decoyWhisperIdx]
+                      : drawing.caption || `网友画作 #${idx + 1}`}
                 </span>
-              </div>
+              </motion.div>
             );
           })}
         </div>
@@ -196,16 +282,25 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
         {!revealedResult ? (
           <div className="mt-3.5 flex items-center justify-between gap-3 border-t border-[#F4F4F5] pt-3">
             <span className="text-[11px] text-[#71717A]">
-              8 张昨日网友画作 + 1 张官方伪装项
+              {scanning ? '正在检测淀粉纯度…' : '小心！有 1 颗假土豆混在里面'}
             </span>
             <button
               type="button"
-              disabled={selectedIds.length < prompt.targetCount}
+              disabled={selectedIds.length < prompt.targetCount || scanning}
               onClick={handleVerify}
               className="btn btn-sm h-10 rounded-xl border-0 bg-[#1A73E8] px-5 text-xs font-bold text-white shadow-xs hover:bg-[#1557B0] disabled:bg-[#E4E4E7] disabled:text-[#A1A1AA]"
             >
-              <span>验证选择</span>
-              <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.2} />
+              {scanning ? (
+                <>
+                  <ScanLine className="h-3.5 w-3.5 animate-pulse" strokeWidth={2.2} />
+                  <span>扫描中…</span>
+                </>
+              ) : (
+                <>
+                  <span>验证选择</span>
+                  <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.2} />
+                </>
+              )}
             </button>
           </div>
         ) : (

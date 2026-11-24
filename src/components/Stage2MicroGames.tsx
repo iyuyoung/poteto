@@ -3,9 +3,11 @@ import { motion } from 'motion/react';
 import {
   AlertTriangle,
   ArrowRight,
+  BatteryLow,
   Check,
   CheckCircle2,
   Eye,
+  Gift,
   Hand,
   HeartPulse,
   MousePointerClick,
@@ -25,11 +27,11 @@ interface Stage2Props {
   onComplete: (result: StageResult) => void;
 }
 
-/* 1. Stillness 5s */
+/* 1. Stillness 5s — Escalating fake-alert baits! */
 const StillnessGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => void }> = ({ onDone }) => {
   const [armed, setArmed] = useState(false);
   const [left, setLeft] = useState(5.0);
-  const [bait, setBait] = useState('');
+  const [baitStep, setBaitStep] = useState(0);
   const doneRef = useRef(false);
 
   useEffect(() => {
@@ -39,12 +41,13 @@ const StillnessGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => vo
       const elapsed = (performance.now() - start) / 1000;
       const rem = Math.max(0, 5 - elapsed);
       setLeft(rem);
-      if (elapsed > 1.4 && elapsed < 3.0) setBait('提示：你的鼠标好像歪了一毫米…');
-      else if (elapsed >= 3.0) setBait('快忍住！千万别碰屏幕！');
+      if (elapsed > 3.3) setBaitStep(3);
+      else if (elapsed > 2.0) setBaitStep(2);
+      else if (elapsed > 0.9) setBaitStep(1);
       if (rem <= 0 && !doneRef.current) {
         doneRef.current = true;
         window.clearInterval(timer);
-        onDone(true, 33, '你成功静止了 5 秒，勉强追平了一颗土豆的日常状态。');
+        onDone(true, 34, '顶住了 3 波离谱弹窗诱惑！你的定力勉强追平一颗土豆。');
       }
     }, 50);
 
@@ -52,7 +55,7 @@ const StillnessGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => vo
       if (doneRef.current) return;
       doneRef.current = true;
       window.clearInterval(timer);
-      onDone(false, 12, '你动了！Poteto #01 甚至没理解为什么这很难。');
+      onDone(false, 12, '上当了！你一动，Poteto #01 靠全程装死轻松躺赢。');
     };
 
     const grace = window.setTimeout(() => {
@@ -69,12 +72,12 @@ const StillnessGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => vo
   }, [armed, onDone]);
 
   return (
-    <div className="flex flex-col items-center py-6 text-center">
+    <div className="relative flex min-h-48 flex-col items-center justify-center py-4 text-center">
       {!armed ? (
         <>
           <OfficialPotatoMascot className="mb-3 h-20 w-20" />
           <p className="mb-5 max-w-xs text-xs text-[#52525B]">
-            点击开始后立刻松开鼠标/手指，保持绝对静止 5 秒。
+            点击开始后立刻松开鼠标/手指，无视接下来出现的一切离谱弹窗，保持静止 5 秒。
           </p>
           <button
             type="button"
@@ -85,7 +88,7 @@ const StillnessGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => vo
             className="btn rounded-xl border-0 bg-[#1A73E8] px-6 text-sm font-semibold text-white hover:bg-[#1557B0]"
           >
             <Hand className="h-4 w-4" strokeWidth={2} />
-            <span>开始 5 秒静止</span>
+            <span>开始 5 秒静止挑战</span>
           </button>
         </>
       ) : (
@@ -93,65 +96,107 @@ const StillnessGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => vo
           <div className="font-mono text-5xl font-extrabold tracking-tight text-[#1A73E8]">
             {left.toFixed(1)}s
           </div>
-          <p className="mt-3 text-xs font-medium text-[#52525B]">
-            {bait || '双手离开设备，像一颗土豆一样放空大脑…'}
+          <p className="mt-2 text-xs font-medium text-[#71717A]">
+            双手离开设备，千万别被下面的东西骗了…
           </p>
+
+          {baitStep === 1 && (
+            <motion.div
+              initial={{ scale: 0.85, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="mt-3 flex items-center gap-2 rounded-xl border border-[#FCA5A5] bg-[#FEF2F2] px-3.5 py-2 text-xs font-bold text-[#DC2626] shadow-md"
+            >
+              <BatteryLow className="h-4 w-4" strokeWidth={2.2} />
+              <span>系统警告：你的鼠标电量仅剩 1%！快晃一下充电！</span>
+            </motion.div>
+          )}
+          {baitStep === 2 && (
+            <motion.div
+              initial={{ scale: 0.85, opacity: 0, rotate: -2 }}
+              animate={{ scale: 1, opacity: 1, rotate: 0 }}
+              className="mt-3 flex items-center gap-2 rounded-xl bg-[#16A34A] px-4 py-2.5 text-xs font-bold text-white shadow-lg"
+            >
+              <Gift className="h-4 w-4" strokeWidth={2.2} />
+              <span>恭喜中奖！点这里免费领取 100 人类纯度！</span>
+            </motion.div>
+          )}
+          {baitStep === 3 && (
+            <motion.div
+              initial={{ scale: 0.85, opacity: 0 }}
+              animate={{ scale: [1, 1.05, 1], opacity: 1 }}
+              className="mt-3 rounded-xl bg-[#18181B] px-4 py-2 text-xs font-bold text-white shadow-lg"
+            >
+              别忍了！你的鼻尖是不是突然有点痒？
+            </motion.div>
+          )}
         </>
       )}
     </div>
   );
 };
 
-/* 2. Splitting Potatoes */
+/* 2. Splitting Potatoes — Mitosis + Undercover Rock Twist! */
 const SplittingPotatoesGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => void }> = ({ onDone }) => {
-  const [count, setCount] = useState(5);
-  const [phase, setPhase] = useState(0);
+  const [potatoes, setPotatoes] = useState(4);
+  const [hasSpy, setHasSpy] = useState(false);
 
   useEffect(() => {
     const t1 = window.setTimeout(() => {
       playPop(0);
-      setCount(7);
-      setPhase(1);
-    }, 1700);
+      setPotatoes(6);
+    }, 1300);
     const t2 = window.setTimeout(() => {
-      playPop(1);
-      setCount(9);
-      setPhase(2);
-    }, 3200);
+      playPop(2);
+      setHasSpy(true);
+    }, 2500);
     return () => {
       window.clearTimeout(t1);
       window.clearTimeout(t2);
     };
   }, []);
 
-  const options = [5, 7, 9, 11];
+  const options = [4, 6, 7, 8];
   return (
     <div className="flex flex-col items-center py-2">
-      <div className="mb-4 flex min-h-36 w-full flex-wrap items-center justify-center gap-2 rounded-xl border border-[#E4E4E7] bg-[#FAFAFB] p-4">
-        {Array.from({ length: count }).map((_, i) => (
+      <div className="mb-3 flex min-h-36 w-full flex-wrap items-center justify-center gap-2 rounded-xl border border-[#E4E4E7] bg-[#FAFAFB] p-4">
+        {Array.from({ length: potatoes }).map((_, i) => (
           <motion.div
             key={i}
-            initial={{ scale: 0.4, opacity: 0 }}
+            initial={{ scale: 0.3, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 360, damping: 20 }}
           >
             <OfficialPotatoMascot className="h-11 w-11" />
           </motion.div>
         ))}
+        {hasSpy && (
+          <motion.div
+            initial={{ scale: 0.2, rotate: -20, opacity: 0 }}
+            animate={{ scale: 1, rotate: 0, opacity: 1 }}
+            className="flex h-11 w-11 flex-col items-center justify-center rounded-xl bg-[#EFF6FF] ring-2 ring-[#1A73E8]"
+            title="我不是土豆，我是卧底人类"
+          >
+            <User className="h-5 w-5 text-[#1A73E8]" strokeWidth={2.2} />
+            <span className="text-[8px] font-bold text-[#1D4ED8]">卧底</span>
+          </motion.div>
+        )}
       </div>
+      <p className="mb-3 text-[11px] font-medium text-[#71717A]">
+        {hasSpy ? '注意！只数真正的土豆，别把混进来的蓝衣卧底算进去！' : '正在分裂中，盯紧真正的土豆数量…'}
+      </p>
       <div className="grid w-full grid-cols-4 gap-2">
         {options.map((n) => (
           <button
             key={n}
             type="button"
             onClick={() => {
-              const exact = n === count;
+              const exact = n === potatoes;
               onDone(
                 exact,
                 exact ? 34 : 18,
                 exact
-                  ? `眼疾手快！你在第 ${phase + 1} 次分裂瞬间准确报出 ${count} 颗。`
-                  : `你选了 ${n} 颗，但按下瞬间它们刚好分裂成了 ${count} 颗！`
+                  ? `眼神太毒了！精准剔除卧底，报出 ${potatoes} 颗真土豆！`
+                  : `你选了 ${n} 颗，实际真土豆是 ${potatoes} 颗${hasSpy ? '（那个蓝色小人是卧底！）' : ''}。`
               );
             }}
             className="btn rounded-xl border border-[#D4D4D8] bg-white font-mono text-sm font-bold text-[#18181B] hover:border-[#1A73E8] hover:bg-[#EFF6FF]"
@@ -164,53 +209,98 @@ const SplittingPotatoesGame: React.FC<{ onDone: (p: boolean, h: number, s: strin
   );
 };
 
-/* 3. Dodging Button */
+/* 3. Dodging Button — 3-Beat Escalation (Dodge -> Shadow Clones -> Surrender) */
 const DodgingButtonGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => void }> = ({ onDone }) => {
-  const [dodges, setDodges] = useState(0);
+  const [beat, setBeat] = useState(0); // 0,1 = dodging; 2 = 3 clones!; 3 = tired real button
   const [pos, setPos] = useState({ x: 0, y: 0 });
-  const tired = dodges >= 3;
+  const [taunt, setTaunt] = useState('抓得到我算你赢');
 
   const flee = () => {
-    if (tired) return;
-    playPop(dodges);
-    setDodges((d) => d + 1);
-    setPos({
-      x: Math.round((Math.random() - 0.5) * 180),
-      y: Math.round((Math.random() - 0.5) * 90),
-    });
+    if (beat >= 2) return;
+    playPop(beat);
+    const next = beat + 1;
+    setBeat(next);
+    if (next === 1) {
+      setPos({ x: 85, y: -38 });
+      setTaunt('太慢了！手抖了吗？');
+    } else if (next === 2) {
+      setPos({ x: 0, y: 0 });
+      setTaunt('影分身之术！只有一个是真的！');
+    }
   };
 
   return (
     <div className="flex flex-col items-center py-2">
-      <div className="relative flex h-44 w-full items-center justify-center overflow-hidden rounded-xl border border-[#E4E4E7] bg-[#FAFAFB]">
-        <motion.button
-          type="button"
-          animate={{ x: pos.x, y: pos.y }}
-          transition={{ type: 'spring', stiffness: 460, damping: 24 }}
-          onMouseEnter={flee}
-          onClick={() => {
-            if (!tired) {
-              flee();
-            } else {
-              onDone(true, 34, '你把确认键追到气喘吁吁，展现了顽强的碳基执念。');
-            }
-          }}
-          className={`btn rounded-xl border-0 px-5 text-xs font-bold text-white shadow-md ${
-            tired ? 'bg-[#16A34A] hover:bg-[#15803D]' : 'bg-[#1A73E8] hover:bg-[#1557B0]'
-          }`}
-        >
-          <MousePointerClick className="h-4 w-4" strokeWidth={2} />
-          <span>{tired ? '跑不动了，点我吧' : '点我证明你是人类'}</span>
-        </motion.button>
+      <div className="relative flex h-44 w-full items-center justify-center overflow-hidden rounded-xl border border-[#E4E4E7] bg-[#FAFAFB] p-3">
+        {beat < 2 && (
+          <motion.button
+            type="button"
+            animate={{ x: pos.x, y: pos.y }}
+            transition={{ type: 'spring', stiffness: 460, damping: 24 }}
+            onMouseEnter={flee}
+            onClick={flee}
+            className="btn rounded-xl border-0 bg-[#1A73E8] px-5 text-xs font-bold text-white shadow-md"
+          >
+            <MousePointerClick className="h-4 w-4" strokeWidth={2} />
+            <span>点我证明你是人类</span>
+          </motion.button>
+        )}
+
+        {beat === 2 && (
+          <div className="grid w-full grid-cols-3 gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                playFail();
+                setTaunt('哈哈！这是假分身！再猜！');
+              }}
+              className="btn btn-sm h-11 rounded-xl border-0 bg-[#1A73E8] text-xs font-bold text-white"
+            >
+              我是真的
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                playPop(2);
+                setBeat(3);
+                setTaunt('呼…呼…被你识破了，我跑不动了');
+              }}
+              className="btn btn-sm h-11 rounded-xl border-0 bg-[#1A73E8] text-xs font-bold text-white"
+            >
+              别点我(汗)
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                playFail();
+                setTaunt('笨！左边那个才像假的，不对…');
+              }}
+              className="btn btn-sm h-11 rounded-xl border-0 bg-[#1A73E8] text-xs font-bold text-white"
+            >
+              点我才对
+            </button>
+          </div>
+        )}
+
+        {beat === 3 && (
+          <motion.button
+            type="button"
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            onClick={() => onDone(true, 34, '识破了影分身还把按钮追到投降，碳基执念拉满！')}
+            className="btn h-12 rounded-xl border-0 bg-[#16A34A] px-6 text-sm font-bold text-white shadow-md hover:bg-[#15803D]"
+          >
+            <Check className="h-4 w-4" strokeWidth={2.5} />
+            <span>行吧我投降，点我过关</span>
+          </motion.button>
+        )}
       </div>
-      <p className="mt-2.5 font-mono text-[11px] text-[#71717A]">
-        按钮体力：{Math.max(0, 3 - dodges)} / 3 {tired ? '（已筋疲力尽）' : '（继续追捕）'}
-      </p>
+      <p className="mt-2.5 text-xs font-semibold text-[#52525B]">{taunt}</p>
     </div>
   );
 };
 
-/* 4. Don't Press Red */
+/* 4. Don't Press Red — Turns GREEN at 2s and LIES to you! */
 const DontPressRedGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => void }> = ({ onDone }) => {
   const [sec, setSec] = useState(5);
   const doneRef = useRef(false);
@@ -222,7 +312,7 @@ const DontPressRedGame: React.FC<{ onDone: (p: boolean, h: number, s: string) =>
           window.clearInterval(t);
           if (!doneRef.current) {
             doneRef.current = true;
-            onDone(true, 34, '你克制住了原始冲动，没有按下那颗诱人的红按钮。');
+            onDone(true, 34, '连它变成绿色撒谎都没骗到你！人类防诈骗模范！');
           }
           return 0;
         }
@@ -232,51 +322,79 @@ const DontPressRedGame: React.FC<{ onDone: (p: boolean, h: number, s: string) =>
     return () => window.clearInterval(t);
   }, [onDone]);
 
-  const labels = [
-    '绝对不要点我',
-    '真的别点，点了就输给土豆',
-    '按一下会有神秘彩蛋（假的）',
-    '再忍 2 秒就赢了，手痒吗？',
-    '最后 1 秒…',
-  ];
+  const fakeGreen = sec <= 2;
+  const labels: Record<number, string> = {
+    5: '绝对不要点我',
+    4: '真的别点，点了直接判负',
+    3: '好吧，其实按一下有隐藏加分？',
+    2: '规则改了！已变绿，现在快点我！',
+    1: '最后 1 秒！快点绿按钮！！',
+  };
 
   return (
     <div className="flex flex-col items-center py-5 text-center">
       <div className="mb-4 font-mono text-3xl font-extrabold text-[#18181B]">00:0{sec}</div>
-      <button
+      <motion.button
         type="button"
+        animate={{ scale: fakeGreen ? 1.08 : 1 }}
         onClick={() => {
           if (doneRef.current) return;
           doneRef.current = true;
-          onDone(false, 10, '你还是忍不住点了红按钮！Poteto #01 靠没有手指完胜。');
+          onDone(
+            false,
+            10,
+            fakeGreen
+              ? '哈哈哈哈它变绿是骗你的！规则根本没改！Poteto #01 笑到发芽！'
+              : '你还是忍不住手贱点了红按钮！Poteto #01 靠没有手指完胜。'
+          );
         }}
-        className="btn h-14 rounded-2xl border-0 bg-[#DC2626] px-7 text-sm font-bold text-white shadow-[0_6px_0_#991B1B] active:translate-y-1 active:shadow-[0_2px_0_#991B1B]"
+        className={`btn h-14 rounded-2xl border-0 px-7 text-sm font-bold text-white transition-colors ${
+          fakeGreen
+            ? 'bg-[#16A34A] shadow-[0_6px_0_#166534]'
+            : 'bg-[#DC2626] shadow-[0_6px_0_#991B1B]'
+        }`}
       >
         <AlertTriangle className="h-4 w-4" strokeWidth={2.2} />
-        <span>{labels[5 - sec] || labels[0]}</span>
-      </button>
+        <span>{labels[sec] || labels[5]}</span>
+      </motion.button>
     </div>
   );
 };
 
-/* 5. Reverse Slider */
+/* 5. Reverse Slider — Poteto #01 nudges your slider once when you get close! */
 const ReverseSliderGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => void }> = ({ onDone }) => {
   const [raw, setRaw] = useState(15);
+  const [nudged, setNudged] = useState(false);
   const display = 100 - raw;
   const inZone = display >= 48 && display <= 52;
+
+  const handleSlide = (val: number) => {
+    const nextDisplay = 100 - val;
+    if (!nudged && nextDisplay >= 48 && nextDisplay <= 52) {
+      setNudged(true);
+      playFail();
+      setRaw(val > 50 ? val - 14 : val + 14);
+      return;
+    }
+    setRaw(val);
+  };
 
   return (
     <div className="flex flex-col items-center py-4">
       <div className={`mb-1 font-mono text-4xl font-extrabold ${inZone ? 'text-[#16A34A]' : 'text-[#18181B]'}`}>
         {display}%
       </div>
-      <p className="mb-4 text-xs text-[#71717A]">目标区间：48% ~ 52%（滑动方向已反接）</p>
+      <p className="mb-4 text-xs text-[#71717A]">
+        {nudged
+          ? 'Poteto #01 刚刚偷推了你的滑块！再调回 48%~52%！'
+          : '目标区间：48% ~ 52%（注意：方向是反的）'}
+      </p>
       <input
         type="range"
         min={0}
         max={100}
         value={raw}
-        onChange={(e) => setRaw(Number(e.target.value))}
+        onChange={(e) => handleSlide(Number(e.target.value))}
         className="range range-info w-full max-w-sm"
         aria-label="反直觉纯度滑块"
       />
@@ -287,8 +405,8 @@ const ReverseSliderGame: React.FC<{ onDone: (p: boolean, h: number, s: string) =
             inZone,
             inZone ? 34 : 18,
             inZone
-              ? `精准停在 ${display}%！你的小脑成功克服了反向映射。`
-              : `你停在了 ${display}%，稍微偏离了 48%~52% 的黄金区间。`
+              ? `顶住土豆捣乱精准停在 ${display}%！小脑控制力满分。`
+              : `你停在了 ${display}%，差一点点就能卡进 48%~52%。`
           )
         }
         className="btn mt-5 rounded-xl border-0 bg-[#1A73E8] px-6 text-xs font-bold text-white hover:bg-[#1557B0]"
@@ -302,7 +420,7 @@ const ReverseSliderGame: React.FC<{ onDone: (p: boolean, h: number, s: string) =
 
 /* 6. Fake Loading */
 const FakeLoadingGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => void }> = ({ onDone }) => {
-  const [pct, setPct] = useState(20);
+  const [pct, setPct] = useState(24);
   const [rushes, setRushes] = useState(0);
   const doneRef = useRef(false);
 
@@ -310,11 +428,11 @@ const FakeLoadingGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => 
     const t = window.setInterval(() => {
       setPct((p) => {
         if (p >= 100) return 100;
-        if (p < 96) return p + 14;
+        if (p < 96) return p + 15;
         if (p < 99) return p + 1;
         return 100;
       });
-    }, 520);
+    }, 480);
     return () => window.clearInterval(t);
   }, []);
 
@@ -326,7 +444,7 @@ const FakeLoadingGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => 
         passed,
         passed ? 34 : 21,
         passed
-          ? '全程没有点「催一下」，你的耐心已经接近一颗成熟的土豆。'
+          ? '卡在 99% 都没点「催一下」，你的耐心已经接近一颗成熟的土豆。'
           : `你忍不住催了 ${rushes} 次，进度条被你吓得反复回滚。`
       );
     }
@@ -335,7 +453,7 @@ const FakeLoadingGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => 
   return (
     <div className="flex flex-col items-center py-5">
       <div className="mb-2 flex w-full max-w-sm justify-between font-mono text-xs font-semibold text-[#52525B]">
-        <span>正在核验人类灵魂完整性…</span>
+        <span>{pct >= 96 ? '卡在 99% 了…要不催一下？' : '正在核验人类灵魂完整性…'}</span>
         <span>{pct}%</span>
       </div>
       <div className="h-3 w-full max-w-sm overflow-hidden rounded-full bg-[#F4F4F5]">
@@ -349,7 +467,7 @@ const FakeLoadingGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => 
         onClick={() => {
           playFail();
           setRushes((r) => r + 1);
-          setPct(12);
+          setPct(8);
         }}
         className="btn btn-sm mt-5 rounded-xl border border-[#D4D4D8] bg-white text-xs text-[#52525B] hover:border-[#DC2626] hover:bg-[#FEF2F2] hover:text-[#DC2626]"
       >
@@ -360,22 +478,28 @@ const FakeLoadingGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => 
   );
 };
 
-/* 7. Potato Blinking */
+/* 7. Potato Blinking — Psychological Fake-outs! */
 const PotatoBlinkingGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => void }> = ({ onDone }) => {
   const [holding, setHolding] = useState(false);
   const [blinking, setBlinking] = useState(false);
+  const [quip, setQuip] = useState('长按按钮与土豆对视，它眨眼瞬间立刻松手');
   const blinkedAtRef = useRef<number | null>(null);
   const doneRef = useRef(false);
 
   useEffect(() => {
     if (!holding) return;
-    const delay = 1300 + Math.random() * 1700;
-    const t = window.setTimeout(() => {
+    const t1 = window.setTimeout(() => setQuip('它嘴角抽了一下…别松手！还没眨！'), 850);
+    const delay = 1800 + Math.random() * 1400;
+    const t2 = window.setTimeout(() => {
       playPop(2);
       setBlinking(true);
+      setQuip('眨眼了！！快松手！！');
       blinkedAtRef.current = performance.now();
     }, delay);
-    return () => window.clearTimeout(t);
+    return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+    };
   }, [holding]);
 
   const release = () => {
@@ -383,7 +507,7 @@ const PotatoBlinkingGame: React.FC<{ onDone: (p: boolean, h: number, s: string) 
     doneRef.current = true;
     setHolding(false);
     if (!blinkedAtRef.current) {
-      onDone(false, 14, '土豆还没眨眼你就先松手了，心理防线崩塌！');
+      onDone(false, 14, '假动作骗到你了！土豆根本还没眨眼！');
     } else {
       const rt = Math.round(performance.now() - blinkedAtRef.current);
       const passed = rt < 950;
@@ -391,27 +515,24 @@ const PotatoBlinkingGame: React.FC<{ onDone: (p: boolean, h: number, s: string) 
         passed,
         passed ? 34 : 22,
         passed
-          ? `反应时间 ${rt}ms！你在土豆眨眼瞬间成功抽身。`
-          : `反应时间 ${rt}ms，稍微慢了半拍。`
+          ? `反应时间 ${rt}ms！识破假动作并在土豆眨眼瞬间成功抽身！`
+          : `反应时间 ${rt}ms，你发呆了半拍。`
       );
     }
   };
 
   return (
     <div className="flex flex-col items-center py-3 text-center">
-      <OfficialPotatoMascot className="mb-3 h-24 w-24" blinking={blinking} />
-      <p className="mb-4 text-xs font-medium text-[#52525B]">
-        {!holding
-          ? '长按下方按钮开始与土豆对视'
-          : blinking
-            ? '它眨眼了！立刻松手！'
-            : '死死盯住它，千万别提前松手…'}
-      </p>
+      <motion.div animate={holding && !blinking ? { rotate: [0, -3, 3, 0] } : undefined} transition={{ repeat: Infinity, duration: 1.6 }}>
+        <OfficialPotatoMascot className="mb-3 h-24 w-24" blinking={blinking} />
+      </motion.div>
+      <p className="mb-4 text-xs font-semibold text-[#52525B]">{quip}</p>
       <button
         type="button"
         onPointerDown={() => {
           playTick();
           setHolding(true);
+          setQuip('死死盯住它，别被假动作骗了…');
         }}
         onPointerUp={release}
         onPointerCancel={release}
@@ -502,12 +623,12 @@ const TinyTargetGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => v
   );
 };
 
-/* 10. Typing Panic — Rebuilt as IME-free mischievous tile tapper! */
+/* 10. Typing Panic — Mischievous Tile Theft Twist! */
 const TypingPanicGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => void }> = ({ onDone }) => {
   const target = ['我', '不', '是', '土', '豆'];
   const [tiles, setTiles] = useState(['不', '土', '我', '豆', '是']);
   const [picked, setPicked] = useState<string[]>([]);
-  const [swappedMsg, setSwappedMsg] = useState(false);
+  const [thiefActive, setThiefActive] = useState(false);
 
   const tapTile = (char: string) => {
     const nextIdx = picked.length;
@@ -516,29 +637,42 @@ const TypingPanicGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => 
       const nextPicked = [...picked, char];
       setPicked(nextPicked);
       if (nextPicked.length === target.length) {
-        onDone(true, 34, '你抵抗住了字块叛变，成功拼出了「我不是土豆」！');
+        onDone(true, 34, '拍飞了偷字土豆，坚定拼出了「我不是土豆」！');
         return;
       }
-      // Mischievously shuffle remaining tiles once after 2nd tap
-      if (nextPicked.length === 2) {
-        setSwappedMsg(true);
-        setTiles((prev) => [...prev].reverse());
+      // After tapping "我", Poteto #01 steals "不" and leaves "真" instead!
+      if (nextPicked.length === 1 && !thiefActive) {
+        setThiefActive(true);
+        playFail();
+        setTiles((prev) => prev.map((c) => (c === '不' ? '真' : c)));
       }
     } else {
       playFail();
-      onDone(false, 16, `点到了「${char}」——字块一慌乱，你差点承认自己是土豆！`);
+      onDone(
+        false,
+        15,
+        char === '真'
+          ? '哈哈哈你中计了！居然自己点出了「我真是土豆」！'
+          : `手滑点到了「${char}」，拼写彻底崩溃！`
+      );
     }
   };
 
+  const slapThief = () => {
+    playPop(2);
+    setThiefActive(false);
+    setTiles((prev) => prev.map((c) => (c === '真' ? '不' : c)).reverse());
+  };
+
   return (
-    <div className="flex flex-col items-center py-4">
-      <div className="mb-4 flex items-center gap-2">
+    <div className="flex flex-col items-center py-3">
+      <div className="mb-3 flex items-center gap-2">
         {target.map((ch, idx) => {
           const filled = idx < picked.length;
           return (
             <div
               key={idx}
-              className={`flex h-11 w-11 items-center justify-center rounded-xl border-2 font-display text-lg font-bold transition ${
+              className={`flex h-10 w-10 items-center justify-center rounded-xl border-2 font-display text-base font-bold transition ${
                 filled
                   ? 'border-[#16A34A] bg-[#F0FDF4] text-[#15803D]'
                   : 'border-dashed border-[#D4D4D8] bg-[#FAFAFB] text-[#D4D4D8]'
@@ -550,26 +684,35 @@ const TypingPanicGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => 
         })}
       </div>
 
+      {thiefActive && (
+        <motion.button
+          type="button"
+          initial={{ scale: 0.85, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          onClick={slapThief}
+          className="mb-3 flex items-center gap-2 rounded-xl border border-[#FDBA74] bg-[#FFF7ED] px-3 py-1.5 text-xs font-bold text-[#C2410C] shadow-xs hover:bg-[#FFEDD5]"
+        >
+          <OfficialPotatoMascot className="h-6 w-6" />
+          <span>Poteto #01 把「不」偷换成了「真」！点它抢回来！</span>
+        </motion.button>
+      )}
+
       <div className="flex flex-wrap justify-center gap-2">
-        {tiles.map((ch) => {
+        {tiles.map((ch, idx) => {
           const used = picked.includes(ch);
           return (
             <button
-              key={ch}
+              key={`${ch}-${idx}`}
               type="button"
               disabled={used}
               onClick={() => tapTile(ch)}
-              className="btn h-12 w-12 rounded-xl border border-[#D4D4D8] bg-white font-display text-base font-bold text-[#18181B] shadow-xs hover:border-[#1A73E8] hover:bg-[#EFF6FF] disabled:opacity-30"
+              className="btn h-11 w-11 rounded-xl border border-[#D4D4D8] bg-white font-display text-base font-bold text-[#18181B] shadow-xs hover:border-[#1A73E8] hover:bg-[#EFF6FF] disabled:opacity-30"
             >
               {ch}
             </button>
           );
         })}
       </div>
-
-      <p className="mt-3 text-[11px] text-[#71717A]">
-        {swappedMsg ? '哈哈，字块偷偷换位置了，看清楚再点！' : '按顺序点击拼出「我不是土豆」'}
-      </p>
     </div>
   );
 };
@@ -579,18 +722,14 @@ const LiarButtonsGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => 
   <div className="grid grid-cols-1 gap-2.5 py-4 sm:grid-cols-2">
     <button
       type="button"
-      onClick={() =>
-        onDone(false, 18, '过度自信触发了年审警报！谦虚是人类的重要美德。')
-      }
+      onClick={() => onDone(false, 18, '过度自信触发了年审警报！谦虚是人类的重要美德。')}
       className="btn h-auto rounded-xl border border-[#D4D4D8] bg-white py-4 text-xs font-bold text-[#18181B] hover:border-[#18181B] hover:bg-[#FAFAFB]"
     >
       我绝对碾压这颗土豆
     </button>
     <button
       type="button"
-      onClick={() =>
-        onDone(true, 34, '诚实且懂得尊重淀粉生命，年审局破例给予高分！')
-      }
+      onClick={() => onDone(true, 34, '诚实且懂得尊重淀粉生命，年审局破例给予高分！')}
       className="btn h-auto rounded-xl border border-[#BFDBFE] bg-[#EFF6FF] py-4 text-xs font-bold text-[#1D4ED8] hover:bg-[#DBEAFE]"
     >
       某些周一早晨我确实不如它
@@ -669,12 +808,19 @@ const ScrollTrapGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => v
   </div>
 );
 
-/* 14. Drag to Peel */
+/* 14. Drag to Peel — Russian Nesting Doll Potato! */
 const DragToPeelGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => void }> = ({ onDone }) => {
   const [peels, setPeels] = useState(0);
   const lastXRef = useRef<number | null>(null);
   const accRef = useRef(0);
   const doneRef = useRef(false);
+
+  const layerLabels = [
+    '第 1 层：普通北海道带泥土豆（左右猛擦削皮）',
+    '第 2 层：咦？削完里面居然还是土豆！继续削！',
+    '第 3 层：怎么还有一层？！再削最后一次！',
+    '里面居然藏着一张纸条：别削了，我就是套娃土豆',
+  ];
 
   const handleMove = (e: React.PointerEvent) => {
     if (doneRef.current) return;
@@ -688,7 +834,7 @@ const DragToPeelGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => v
         setPeels(next);
         if (next >= 3 && !doneRef.current) {
           doneRef.current = true;
-          onDone(true, 34, '成功削完 3 层皮（里面依然是土豆），对生拇指认证通过！');
+          onDone(true, 34, '削完 3 层皮里面居然还是套娃土豆！但你的对生拇指通过了认证！');
         }
       }
     }
@@ -704,12 +850,16 @@ const DragToPeelGame: React.FC<{ onDone: (p: boolean, h: number, s: string) => v
         }}
         className="flex h-36 w-full max-w-xs cursor-grab touch-none flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#D4D4D8] bg-[#FAFAFB] select-none active:cursor-grabbing"
       >
-        <OfficialPotatoMascot className="h-20 w-20" />
-        <span className="mt-1 text-xs font-medium text-[#71717A]">按住左右来回擦拭削皮</span>
+        <motion.div key={peels} initial={{ scale: 0.75, rotate: -10 }} animate={{ scale: 1, rotate: 0 }}>
+          <OfficialPotatoMascot className="h-20 w-20" sprout={peels >= 2} />
+        </motion.div>
+        <span className="mt-1 px-2 text-center text-[11px] font-medium text-[#52525B]">
+          {layerLabels[Math.min(3, peels)]}
+        </span>
       </div>
       <div className="mt-2.5 flex items-center gap-1.5 font-mono text-xs font-semibold text-[#52525B]">
         <Sparkles className="h-3.5 w-3.5 text-[#1A73E8]" strokeWidth={2} />
-        <span>削皮进度：{Math.min(3, peels)} / 3</span>
+        <span>已削层数：{Math.min(3, peels)} / 3</span>
       </div>
     </div>
   );
