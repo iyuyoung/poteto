@@ -14,10 +14,10 @@ interface Stage1UgcGridProps {
 }
 
 const DECOY_WHISPERS = [
-  '别看我，我真是土豆',
-  '绝对不是石头',
-  '100% 合法淀粉',
-  '请忽略我的六条边',
+  'Totally a real spud',
+  'Ignore my 6 corners',
+  '100% legit starch',
+  'Fellow tuber here',
 ];
 
 export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
@@ -73,7 +73,7 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
             return copy;
           });
           playTick();
-          setTwistBanner('Poteto #01 急了！它偷偷把两颗土豆换了位置！');
+          setTwistBanner('Spud #01 panicked and swapped two potatoes!');
           window.setTimeout(() => setTwistBanner(null), 2600);
         }, 220);
       }
@@ -91,9 +91,9 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
       const [replacement, ...rest] = reserves;
       setGrid((prev) => prev.map((item, i) => (i === idx ? replacement : item)));
       setReserves(rest);
-      setReportNotice('已收到举报，已从备选池无缝顶替一颗合规土豆。');
+      setReportNotice('Flagged! Swapped in a fresh verified potato from reserves.');
     } else {
-      setReportNotice('已记录举报，感谢维护社区纯净度。');
+      setReportNotice('Flag recorded. Thanks for keeping the spud pool clean.');
     }
 
     window.setTimeout(() => setReportNotice(null), 2600);
@@ -129,8 +129,8 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
         humanScore: pickedDecoy ? 18 : 34,
         potatoScore: 26,
         summary: pickedDecoy
-          ? '你把混进来的六边形鹅卵石（淀粉含量 0%）当成了土豆。'
-          : '精准避开伪装石块，Poteto #01 乱压只蒙对了 1 格。',
+          ? 'Caught in 4K! You picked a literal hexagon rock (0% starch).'
+          : 'Dodged the decoy rock! Spud #01 guessed randomly and hit 1.',
       };
 
       setRevealedResult(result);
@@ -145,15 +145,15 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
       transition={{ duration: 0.22 }}
       className="overflow-hidden rounded-3xl border border-[#E4E4E7] bg-white shadow-[0_12px_36px_rgba(0,0,0,0.06)]"
     >
-      {/* Compact Blue CAPTCHA Header — fits cleanly above the fold on 1280x800 */}
+      {/* Compact Blue CAPTCHA Header */}
       <div className="bg-[#1A73E8] px-5 py-3.5 text-white">
         <div className="flex items-center justify-between text-[11px] font-medium text-white/80">
-          <span>第 1 关 / 共 3 关 · {prompt.tagLabel}</span>
+          <span>STAGE 1 OF 3 · {prompt.tagLabel}</span>
           <span className="font-mono tabular-nums">
-            已选 {selectedIds.length} / {prompt.targetCount}
+            {selectedIds.length} / {prompt.targetCount} selected
           </span>
         </div>
-        <h2 className="mt-1 font-display text-lg font-bold tracking-tight sm:text-xl">
+        <h2 className="mt-1 font-display text-lg font-bold leading-snug tracking-tight sm:text-xl">
           {prompt.title}
         </h2>
         <p className="mt-0.5 text-xs text-white/85">{prompt.subtitle}</p>
@@ -191,7 +191,6 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
             const isSelected = selectedIds.includes(drawing.id);
             const isDecoy = Boolean(drawing.isOfficialDecoy);
 
-            // Uniform outer dimensions (zero scale jitter!) + unmistakable Pass/Fail states
             let tileStyle =
               'border-[#F4F4F5] bg-[#FAFAFB] hover:border-[#D4D4D8] hover:bg-white';
             if (revealedResult) {
@@ -215,21 +214,18 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
                 key={drawing.id}
                 className="group relative"
               >
-                {/* Valid semantic HTML: primary tile button + sibling report button */}
                 <button
                   type="button"
                   onClick={() => toggleSelect(drawing.id)}
                   aria-pressed={isSelected}
                   className={`flex h-[116px] w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 p-2 transition-colors select-none sm:h-[124px] ${tileStyle}`}
                 >
-                  {/* Pre-reveal selection check */}
                   {!revealedResult && isSelected && (
                     <span className="absolute left-2 top-2 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-[#1A73E8] text-white">
                       <Check className="h-3 w-3" strokeWidth={2.5} />
                     </span>
                   )}
 
-                  {/* Post-reveal Pass / Fail badges */}
                   {revealedResult && isSelected && !isDecoy && (
                     <span className="absolute left-2 top-2 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-[#16A34A] text-white">
                       <Check className="h-3 w-3" strokeWidth={2.5} />
@@ -242,7 +238,7 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
                   )}
                   {revealedResult && isDecoy && (
                     <span className="absolute right-2 top-2 z-10 rounded-md bg-[#DC2626] px-1.5 py-0.5 text-[10px] font-bold text-white">
-                      {isSelected ? '踩雷' : '卧底石块'}
+                      {isSelected ? 'Busted!' : 'Fake Rock'}
                     </span>
                   )}
 
@@ -269,20 +265,19 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
                   <span className="mt-0.5 max-w-full truncate px-1 text-[11px] font-medium text-[#71717A]">
                     {revealedResult
                       ? isDecoy
-                        ? '淀粉含量 0%'
-                        : `${Math.min(92, 28 + ((drawing.fooledCount ?? 30) % 58))}% 人选`
+                        ? '0% Starch'
+                        : `${Math.min(92, 28 + ((drawing.fooledCount ?? 30) % 58))}% picked`
                       : isDecoy
                         ? DECOY_WHISPERS[decoyWhisperIdx]
-                        : drawing.caption || `网友画作 #${idx + 1}`}
+                        : drawing.caption || `Doodle #${idx + 1}`}
                   </span>
                 </button>
 
-                {/* Sibling hover-only report flag (100% valid HTML, zero nested buttons) */}
                 {!isDecoy && !revealedResult && (
                   <button
                     type="button"
-                    title="举报违规画作（满 3 次自动熔断）"
-                    aria-label="举报该画作"
+                    title="Flag inappropriate doodle (auto-hidden at 3 flags)"
+                    aria-label="Flag doodle"
                     onClick={() => handleReport(drawing, idx)}
                     className="absolute right-1.5 top-1.5 z-10 flex h-6 w-6 items-center justify-center rounded-lg text-[#A1A1AA] opacity-0 transition group-hover:opacity-80 hover:bg-white hover:text-[#DC2626]"
                   >
@@ -298,7 +293,7 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
         {!revealedResult ? (
           <div className="mt-3.5 flex items-center justify-between gap-4 border-t border-[#F4F4F5] pt-3">
             <span className="text-xs text-[#71717A]">
-              {scanning ? '正在检测淀粉纯度…' : '小心！有 1 颗假土豆混在里面'}
+              {scanning ? 'Scanning starch purity...' : 'Heads up: 1 impostor rock is hiding in here'}
             </span>
             <button
               type="button"
@@ -306,7 +301,7 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
               onClick={handleVerify}
               className="btn h-9 rounded-xl border-0 bg-[#1A73E8] px-5 text-xs font-bold text-white hover:bg-[#1557B0] disabled:bg-[#E4E4E7] disabled:text-[#A1A1AA]"
             >
-              {scanning ? '扫描中…' : '验证选择'}
+              {scanning ? 'Scanning...' : 'Verify'}
             </button>
           </div>
         ) : (
@@ -338,10 +333,10 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
                       revealedResult.passed ? 'text-[#166534]' : 'text-[#991B1B]'
                     }`}
                   >
-                    {revealedResult.passed ? '避雷成功' : '踩中伪装石块'}
+                    {revealedResult.passed ? 'Impostor Dodged' : 'Fell for a Rock'}
                   </span>
                   <span className="font-mono text-xs font-semibold text-[#52525B] tabular-nums">
-                    你 +{revealedResult.humanScore} · 土豆 +{revealedResult.potatoScore}
+                    You +{revealedResult.humanScore} · Spud +{revealedResult.potatoScore}
                   </span>
                 </div>
                 <p className="mt-0.5 text-xs text-[#52525B]">{revealedResult.summary}</p>
@@ -356,7 +351,7 @@ export const Stage1UgcGrid: React.FC<Stage1UgcGridProps> = ({
               }}
               className="btn h-9 shrink-0 rounded-xl border-0 bg-[#18181B] px-5 text-xs font-bold text-white hover:bg-[#27272A]"
             >
-              下一关
+              Next Stage
             </button>
           </motion.div>
         )}

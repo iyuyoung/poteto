@@ -82,15 +82,15 @@ export interface ValidationResult {
  */
 export function validatePotatoDrawing(data: PotatoPathData): ValidationResult {
   if (!data || !Array.isArray(data.strokes) || data.strokes.length === 0) {
-    return { valid: false, reason: '先画第 1 笔土豆轮廓，再给它点上表情吧。' };
+    return { valid: false, reason: 'Draw a potato outline first, then add a face.' };
   }
   if (data.strokes.length > 4) {
-    return { valid: false, reason: '最多只允许画 4 笔（1 笔轮廓 + 3 笔五官）。' };
+    return { valid: false, reason: 'Max 4 strokes allowed (1 outline + up to 3 face strokes).' };
   }
 
   for (const stroke of data.strokes) {
     if (!Array.isArray(stroke) || stroke.length === 0 || stroke.length > 45) {
-      return { valid: false, reason: '笔画数据异常，请重新绘制。' };
+      return { valid: false, reason: 'Invalid stroke data. Please redraw.' };
     }
     for (const pt of stroke) {
       if (
@@ -103,14 +103,14 @@ export function validatePotatoDrawing(data: PotatoPathData): ValidationResult {
         pt[1] < 0 ||
         pt[1] > 100
       ) {
-        return { valid: false, reason: '坐标超出画布范围。' };
+        return { valid: false, reason: 'Coordinates out of canvas bounds.' };
       }
     }
   }
 
   const outline = data.strokes[0];
   if (outline.length < 4) {
-    return { valid: false, reason: '第 1 笔太短了，请一笔画出一个完整的土豆轮廓。' };
+    return { valid: false, reason: 'Stroke 1 is way too short—draw a full potato silhouette.' };
   }
 
   let minX = 100;
@@ -127,14 +127,14 @@ export function validatePotatoDrawing(data: PotatoPathData): ValidationResult {
   const bboxW = maxX - minX;
   const bboxH = maxY - minY;
   if (bboxW < 18 || bboxH < 18) {
-    return { valid: false, reason: '这颗土豆太迷你了，请画大一点让评审官看清。' };
+    return { valid: false, reason: 'Too tiny! Draw a bigger potato so the auditor can see it.' };
   }
 
   const aspectRatio = bboxW / bboxH;
   if (aspectRatio < 0.45 || aspectRatio > 2.2) {
     return {
       valid: false,
-      reason: '形状太细长了（更像薯条），土豆的长宽比需在 0.45 ~ 2.2 之间。',
+      reason: 'Way too skinny (that\'s a French fry). Keep aspect ratio between 0.45 and 2.2.',
       aspectRatio,
     };
   }
@@ -145,7 +145,7 @@ export function validatePotatoDrawing(data: PotatoPathData): ValidationResult {
   if (closureDistance > 32) {
     return {
       valid: false,
-      reason: '第 1 笔轮廓还没闭合！让起点和终点再靠近一点点就好。',
+      reason: 'Close the loop on Stroke 1! Your starch is leaking out.',
       closureDistance,
       aspectRatio,
     };

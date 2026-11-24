@@ -7,7 +7,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const drawingId = String(body.drawingId ?? '').trim().slice(0, 64);
 
     if (!drawingId) {
-      return new Response(JSON.stringify({ ok: false, error: '缺少 drawingId' }), {
+      return new Response(JSON.stringify({ ok: false, error: 'Missing drawingId' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });

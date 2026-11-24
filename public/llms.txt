@@ -1,22 +1,22 @@
-# Poteto — 每日人类资格年审 (Daily Human Qualification Audit)
+# Poteto — Daily Human Audit
 
-> 免注册、零登录门槛的 90 秒每日全球同题荒诞交互小游戏。玩家点击经典「我不是机器人」勾选框，完成 3 关测试，与来自北海道的对照组土豆（Poteto #01）比拼“人类纯度”，并生成附带个人手绘土豆证件照的《人类资格鉴定书》。
+> A zero-login, 90-second daily CAPTCHA comedy game. Check "I'm not a robot", beat a completely unbothered Idaho control potato (Spud #01) across 3 absurd stages, and walk away with a laminated Human License featuring your own potato sketch.
 
-## 核心价值与玩法
-- **零摩擦入口**：首屏即本体，无需注册或登录，通过浏览器本地匿名 UUID（`localStorage`）保存每日连胜纪录与昨日画作回访战报。
-- **每日全球同题（Deterministic Seed）**：以 UTC 日期（`YYYY-MM-DD`）作为确定性随机种子，全球玩家每天面对同一套题目与昨日社区精选画作池。
-- **三关年审结构**：
-  1. **第 1 关（视觉 / UGC 辨别）**：从昨日审核通过的 8 张网友手绘矢量土豆 + 1 张官方干扰项中完成当日命题辨别，支持角落一键举报熔断。
-  2. **第 2 关（反直觉交互）**：内置 16 套高笑点交互微关卡（5 秒不动鼠标、细胞分裂数土豆、躲避光标按钮、冲动抑制红按钮等），每日轮换连续 7 天以上不重复。
-  3. **第 3 关（手绘自证）**：8 秒限时、最多 3 笔、粗笔触、闭合度与长宽比初筛，经 Ramer-Douglas-Peucker 压缩为 300–600 字节矢量 JSON，既作证件照又成为明日考题弹药。
-- **病毒分享与延展**：一键复制 Wordle 风格 Emoji 战绩、下载 PNG 鉴定书、进入「无尽年审（Endless Mode）」、开启明日过期提醒。
+## How It Works
+- **Zero Friction**: No sign-up walls. Anonymous browser UUID (`localStorage`) tracks streaks and yesterday's doodle stats.
+- **Global Daily Seed**: Seeded deterministically by UTC date (`YYYY-MM-DD`) so everyone plays the exact same daily puzzle.
+- **Three-Stage Protocol**:
+  1. **Stage 1 (UGC Potato Audit)**: Spot 3 community-drawn vector potatoes while dodging 1 sneaky sharp-edged hexagon rock decoy—complete with live sabotage and 3-flag community takedowns.
+  2. **Stage 2 (16 Unhinged Mini-Games)**: Rotates daily across 16 anti-intuition micro-games (Commitment Issues Button, Touch Nothing Challenge, Impulse Control Trap, Anti-Spud Spellcheck, etc.) with zero repeats across 16 days.
+  3. **Stage 3 (10-Second Sketch ID)**: Draw a prompt potato in up to 4 strokes. Normalized to 0–100 integer coordinates and compressed with Ramer-Douglas-Peucker to 300–600 bytes of JSON.
+- **Share & Endless Mode**: Copy Wordle-style emoji scores, export PNG ID cards, play Endless Mode, or set a daily UTC reminder.
 
-## 核心页面
-- 首页（每日年审本体）：https://poteto.fun/
-- 关于我们与架构说明：https://poteto.fun/about
-- 隐私政策：https://poteto.fun/privacy
-- 服务条款：https://poteto.fun/terms
+## Key Pages
+- Play Daily Audit: https://poteto.fun/
+- About & Architecture: https://poteto.fun/about
+- Privacy Policy: https://poteto.fun/privacy
+- Terms of Service: https://poteto.fun/terms
 
-## 技术栈与联系
-- 技术栈：Astro 5 + React 19 + Tailwind CSS v4 + DaisyUI v5 + Cloudflare Workers + Neon (PostgreSQL)
-- 官方联系邮箱：hello@poteto.fun
+## Stack & Contact
+- Stack: Astro 5 + React 19 + Tailwind CSS v4 + DaisyUI v5 + Cloudflare Workers + Neon (PostgreSQL)
+- Contact: hello@poteto.fun

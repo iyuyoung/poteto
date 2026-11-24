@@ -2,10 +2,10 @@ import type { AuditSessionResult, PotatoPathData } from './types';
 import { getYesterdayUtcDateString } from './prng';
 
 const KEY_CLIENT_ID = 'poteto_client_id_v1';
-const KEY_STREAK = 'poteto_streak_v1';
-const KEY_LAST_DATE = 'poteto_last_audit_date_v1';
-const KEY_DAILY_RESULT_PREFIX = 'poteto_daily_result_v1_';
-const KEY_YESTERDAY_DRAWING_PREFIX = 'poteto_drawing_v1_';
+const KEY_STREAK = 'poteto_streak_v2_en';
+const KEY_LAST_DATE = 'poteto_last_audit_date_v2_en';
+const KEY_DAILY_RESULT_PREFIX = 'poteto_daily_result_v2_en_';
+const KEY_YESTERDAY_DRAWING_PREFIX = 'poteto_drawing_v2_en_';
 const KEY_REMINDER = 'poteto_reminder_enabled_v1';
 
 export function getOrCreateClientId(): string {

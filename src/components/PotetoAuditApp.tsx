@@ -109,7 +109,7 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
               hasYesterday: true,
               fooledCount: 41,
               drawing: localY.drawing,
-              message: '你昨天画的土豆，昨晚成功骗过了 41 个人类。',
+              message: 'Your potato doodle successfully gaslit 41 humans last night.',
             });
           }
         }
@@ -156,7 +156,6 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
     window.setTimeout(() => {
       playPop(1);
       setCheckingBox(false);
-      // If daily audit is already completed, launch Endless Mode from entry seamlessly!
       if (savedDaily) {
         startEndlessMode();
         return;
@@ -229,10 +228,10 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
 
   const potatoStatus =
     phase === 'stage1'
-      ? '正用淀粉直觉凝视九宫格'
+      ? 'Staring blankly at the 3x3 grid'
       : phase === 'stage2'
         ? activePayload.stage2Game.potatoStatus
-        : '试图用根须握笔（失败中）';
+        : 'Trying to hold a pen (failing)';
 
   const containerWidth =
     phase === 'entry'
@@ -256,7 +255,7 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
             </div>
           )}
           <p className="text-xs leading-relaxed text-[#9A3412]">
-            <span className="font-bold">昨日回访战报：</span>
+            <span className="font-bold">Yesterday&apos;s report: </span>
             {yesterdayHook.message}
           </p>
         </motion.div>
@@ -271,7 +270,6 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
               : `POTETO AUDIT #${formatAuditNumber(activePayload.auditNumber)}`}
           </span>
 
-          {/* Subtle Return/Preview Entry Switch when daily is already completed */}
           {savedDaily && phase === 'result' && (
             <button
               type="button"
@@ -281,7 +279,7 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
               }}
               className="text-[11px] font-medium text-[#71717A] underline decoration-[#D4D4D8] underline-offset-4 transition hover:text-[#09090B]"
             >
-              返回首屏
+              Home
             </button>
           )}
           {savedDaily && phase === 'entry' && (
@@ -295,7 +293,7 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
               }}
               className="text-[11px] font-medium text-[#1A73E8] underline decoration-[#BFDBFE] underline-offset-4 transition hover:text-[#1557B0]"
             >
-              查看今日鉴定书
+              Today&apos;s ID
             </button>
           )}
         </div>
@@ -303,7 +301,7 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
         <div className="flex items-center gap-2">
           <span
             className="inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 font-mono text-[11px] font-medium text-[#52525B] ring-1 ring-[#E4E4E7] tabular-nums"
-            title="距离今日人类资格过期剩余时间"
+            title="Time left until today's human license expires"
           >
             <Clock className="h-3.5 w-3.5 text-[#A1A1AA]" strokeWidth={1.75} />
             {countdown}
@@ -312,7 +310,7 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
           <button
             type="button"
             onClick={toggleMute}
-            aria-label={muted ? '开启音效' : '静音'}
+            aria-label={muted ? 'Unmute sound effects' : 'Mute sound effects'}
             className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-[#71717A] ring-1 ring-[#E4E4E7] transition hover:text-[#09090B]"
           >
             {muted ? (
@@ -324,7 +322,7 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
         </div>
       </div>
 
-      {/* Persistent Control Potato HUD during Stages 1-3 (updates live on reveal!) */}
+      {/* Persistent Control Potato HUD during Stages 1-3 */}
       {(phase === 'stage1' || phase === 'stage2' || phase === 'stage3') && (
         <div className="mb-3">
           <CompetitorHud
@@ -345,10 +343,10 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
           className="flex flex-col items-center py-8 text-center"
         >
           <h1 className="font-display text-3xl font-extrabold tracking-tight text-[#09090B] sm:text-4xl">
-            证明你是人类
+            Prove you&apos;re human
           </h1>
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-[#71717A]">
-            90 秒三关全球同题年审，别输给北海道对照组土豆。
+            A 90-second daily CAPTCHA audit against a completely unbothered Idaho potato.
           </p>
 
           {/* Iconic Google reCAPTCHA v2-style Interactive Box with Peeking Potato */}
@@ -364,7 +362,7 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
               type="button"
               onClick={handleCheckboxClick}
               disabled={checkingBox}
-              aria-label="勾选我不是机器人，开始今日人类资格年审"
+              aria-label="Check I am not a robot to start today's human audit"
               className="group relative z-10 flex w-full items-center justify-between rounded-md border border-[#D3D3D3] bg-[#F9F9F9] px-5 py-4 text-left shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-all hover:border-[#B8B8B8] hover:bg-white hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] active:scale-[0.99]"
             >
               <div className="flex items-center gap-4">
@@ -381,10 +379,10 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
                 </span>
                 <span className="text-[15px] font-medium text-[#202124]">
                   {checkingBox
-                    ? '正在检测淀粉含量…'
+                    ? 'Checking starch levels...'
                     : savedDaily
-                      ? '再来一局无尽年审'
-                      : '我不是机器人'}
+                      ? 'Play Endless Mode'
+                      : "I'm not a robot"}
                 </span>
               </div>
 
@@ -393,15 +391,15 @@ export const PotetoAuditApp: React.FC<PotetoAuditAppProps> = ({ initialDaily, si
                 <span className="mt-1 text-[9px] font-semibold tracking-tight text-[#555555]">
                   rePOTETO
                 </span>
-                <span className="text-[7px] text-[#777777]">隐私 - 条款</span>
+                <span className="text-[7px] text-[#777777]">Privacy - Terms</span>
               </div>
             </button>
           </div>
 
           <p className="mt-8 font-mono text-xs text-[#A1A1AA]">
             {savedDaily
-              ? '今日年审已通过归档 · 勾选可进入无尽年审模式'
-              : '免注册 · 每日 UTC 00:00 全球同题刷新'}
+              ? 'Today\'s audit archived · Check the box for Endless Mode'
+              : 'No login · Global daily seed · Resets at UTC 00:00'}
           </p>
         </motion.section>
       )}

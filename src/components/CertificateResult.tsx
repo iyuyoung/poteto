@@ -34,10 +34,10 @@ export const CertificateResult: React.FC<CertificateResultProps> = ({
   const stageIcons = result.stages.map((s) => (s.passed ? '✅' : '❌')).join('');
   const streakText =
     result.mode === 'daily'
-      ? `连续 ${result.streak} 天${beatPotato ? '险胜土豆' : '被土豆羞辱'}`
-      : `无尽年审模式`;
+      ? `${result.streak}-day streak ${beatPotato ? 'vs a potato' : 'getting roasted'}`
+      : `Endless Mode`;
 
-  const shareText = `🥔 Poteto ${auditCode} | 人类纯度 ${result.humanPurity}% | 🥔${stageIcons} | ${streakText}\n${siteUrl}`;
+  const shareText = `🥔 Poteto ${auditCode} | ${result.humanPurity}% Human | 🥔${stageIcons} | ${streakText}\n${siteUrl}`;
 
   const handleCopy = async () => {
     playPop(1);
@@ -85,11 +85,11 @@ export const CertificateResult: React.FC<CertificateResultProps> = ({
 
     ctx.fillStyle = '#71717A';
     ctx.font = 'bold 16px monospace';
-    ctx.fillText(`POTETO HUMAN QUALIFICATION CERTIFICATE · ${auditCode}`, 56, 78);
+    ctx.fillText(`POTETO HUMAN QUALIFICATION · ${auditCode}`, 56, 78);
 
     ctx.fillStyle = '#09090B';
-    ctx.font = 'bold 36px sans-serif';
-    ctx.fillText('人类资格鉴定书', 56, 128);
+    ctx.font = 'bold 34px sans-serif';
+    ctx.fillText('Human License Certificate', 56, 126);
 
     ctx.fillStyle = '#FAFAFB';
     ctx.fillRect(56, 164, 240, 240);
@@ -123,28 +123,28 @@ export const CertificateResult: React.FC<CertificateResultProps> = ({
     ctx.fillText('VERIFIED ID PHOTO (SVG)', 86, 434);
 
     ctx.fillStyle = '#71717A';
-    ctx.font = 'bold 18px sans-serif';
-    ctx.fillText('人类纯度判定', 336, 196);
+    ctx.font = 'bold 16px sans-serif';
+    ctx.fillText('HUMAN PURITY SCORE', 336, 196);
 
     ctx.fillStyle = beatPotato ? '#16A34A' : '#DC2626';
     ctx.font = 'bold 80px monospace';
     ctx.fillText(`${result.humanPurity}%`, 336, 282);
 
     ctx.fillStyle = '#09090B';
-    ctx.font = 'bold 26px sans-serif';
+    ctx.font = 'bold 24px sans-serif';
     ctx.fillText(result.verdictTitle, 336, 336);
 
     ctx.fillStyle = '#52525B';
-    ctx.font = '18px sans-serif';
-    ctx.fillText(result.verdictSubtitle.slice(0, 32), 336, 376);
-    if (result.verdictSubtitle.length > 32) {
-      ctx.fillText(result.verdictSubtitle.slice(32), 336, 404);
+    ctx.font = '17px sans-serif';
+    ctx.fillText(result.verdictSubtitle.slice(0, 48), 336, 376);
+    if (result.verdictSubtitle.length > 48) {
+      ctx.fillText(result.verdictSubtitle.slice(48), 336, 404);
     }
 
     ctx.fillStyle = '#18181B';
     ctx.font = 'bold 18px monospace';
     ctx.fillText(
-      `YOU ${result.humanTotal} PTS   VS   POTETO #01 ${result.potatoTotal} PTS`,
+      `YOU ${result.humanTotal} PTS   VS   SPUD #01 ${result.potatoTotal} PTS`,
       336,
       462
     );
@@ -154,7 +154,7 @@ export const CertificateResult: React.FC<CertificateResultProps> = ({
     ctx.fillText(`DATE: ${result.auditDate} (UTC)  ·  ${siteUrl.replace(/^https?:\/\//, '')}`, 56, 540);
 
     const link = document.createElement('a');
-    link.download = `poteto-audit-${formatAuditNumber(result.auditNumber)}.png`;
+    link.download = `poteto-${result.mode === 'endless' ? `endless-${result.endlessRound ?? 1}` : formatAuditNumber(result.auditNumber)}.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
   };
@@ -167,7 +167,7 @@ export const CertificateResult: React.FC<CertificateResultProps> = ({
         if (perm === 'granted') {
           setReminderEnabled(true);
           setReminderOn(true);
-          setReminderMsg('已开启浏览器提醒！明日 UTC 00:00 人类资格过期前将提醒你年审。');
+          setReminderMsg('Reminders enabled! We\'ll ping you before your human license expires at UTC 00:00.');
           return;
         }
       } catch {
@@ -180,12 +180,12 @@ export const CertificateResult: React.FC<CertificateResultProps> = ({
     const ics = [
       'BEGIN:VCALENDAR',
       'VERSION:2.0',
-      'PRODID:-//Poteto//Human Audit Reminder//CN',
+      'PRODID:-//Poteto//Human Audit Reminder//EN',
       'BEGIN:VEVENT',
-      `DTSTART:${ymd}T010000Z`,
-      `DTEND:${ymd}T010500Z`,
-      'SUMMARY:Poteto 每日人类资格年审（防止输给土豆）',
-      `DESCRIPTION:你的人类资格即将过期，点击完成 90 秒年审：${siteUrl}`,
+      `DTSTART:${ymd}T140000Z`,
+      `DTEND:${ymd}T140500Z`,
+      'SUMMARY:Poteto Daily Human Audit (Beat the Potato)',
+      `DESCRIPTION:Your human license expires today. Prove you're smarter than Spud #01: ${siteUrl}`,
       'END:VEVENT',
       'END:VCALENDAR',
     ].join('\r\n');
@@ -199,7 +199,7 @@ export const CertificateResult: React.FC<CertificateResultProps> = ({
 
     setReminderEnabled(true);
     setReminderOn(true);
-    setReminderMsg('已生成明日年审日历提醒（.ics），导入即可准时续费连胜。');
+    setReminderMsg('Downloaded a calendar reminder (.ics) so your streak never dies.');
   };
 
   return (
@@ -211,7 +211,6 @@ export const CertificateResult: React.FC<CertificateResultProps> = ({
     >
       {/* Modern Laminated ID Certificate Card */}
       <div className="overflow-hidden rounded-3xl border border-[#E4E4E7] bg-white shadow-[0_16px_48px_rgba(0,0,0,0.06)]">
-        {/* Top Security Ribbon */}
         <div
           className={`h-1.5 w-full bg-gradient-to-r ${
             beatPotato
@@ -229,7 +228,7 @@ export const CertificateResult: React.FC<CertificateResultProps> = ({
             <div className="flex items-center gap-3 font-mono text-xs text-[#71717A]">
               {result.mode === 'daily' && (
                 <span className="rounded-full bg-[#FFF7ED] px-2.5 py-0.5 font-semibold text-[#EA580C]">
-                  {result.streak} 天连胜
+                  {result.streak}-day streak
                 </span>
               )}
               <span>{result.auditDate}</span>
@@ -258,10 +257,10 @@ export const CertificateResult: React.FC<CertificateResultProps> = ({
 
             <div className="min-w-0 flex-1 text-center sm:text-left">
               <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-[#71717A] sm:justify-start">
-                <span className="font-medium">人类纯度判定</span>
+                <span className="font-medium">Human Purity</span>
                 <span className="text-[#D4D4D8]">·</span>
                 <span className="font-mono tabular-nums">
-                  你 {result.humanTotal} vs 土豆 {result.potatoTotal}
+                  You {result.humanTotal} vs Spud {result.potatoTotal}
                 </span>
               </div>
 
@@ -342,12 +341,12 @@ export const CertificateResult: React.FC<CertificateResultProps> = ({
                 {copied ? (
                   <>
                     <Check className="h-4 w-4 text-[#4ADE80]" strokeWidth={2.2} />
-                    <span>已复制战绩</span>
+                    <span>Copied to clipboard!</span>
                   </>
                 ) : (
                   <>
                     <Copy className="h-3.5 w-3.5" strokeWidth={1.75} />
-                    <span>复制 Emoji 战绩</span>
+                    <span>Copy Emoji Score</span>
                   </>
                 )}
               </button>
@@ -357,7 +356,7 @@ export const CertificateResult: React.FC<CertificateResultProps> = ({
                 className="btn h-9 rounded-xl border border-[#D4D4D8] bg-white px-5 text-xs font-semibold text-[#18181B] hover:bg-[#F4F4F5]"
               >
                 <Download className="h-3.5 w-3.5" strokeWidth={1.75} />
-                <span>保存鉴定书</span>
+                <span>Save PNG</span>
               </button>
             </div>
           </div>
@@ -380,10 +379,10 @@ export const CertificateResult: React.FC<CertificateResultProps> = ({
           </span>
           <div>
             <div className="font-display text-sm font-bold text-[#09090B]">
-              {result.mode === 'endless' ? '再来一局无尽年审' : '进入无尽年审'}
+              {result.mode === 'endless' ? 'Play Another Endless Round' : 'Enter Endless Mode'}
             </div>
             <p className="text-[11px] text-[#71717A]">
-              随机刷遍全部 16 个反直觉微关卡
+              Shuffle all 16 unhinged mini-games
             </p>
           </div>
         </button>
@@ -402,10 +401,10 @@ export const CertificateResult: React.FC<CertificateResultProps> = ({
           </span>
           <div>
             <div className="font-display text-sm font-bold text-[#09090B]">
-              {reminderOn ? '已开启明日提醒' : '开启明日过期提醒'}
+              {reminderOn ? 'Daily Reminder Active' : 'Remind Me Tomorrow'}
             </div>
             <p className="text-[11px] text-[#71717A]">
-              UTC 00:00 刷新，防止连胜中断
+              Resets at UTC 00:00 — protect your streak
             </p>
           </div>
         </button>

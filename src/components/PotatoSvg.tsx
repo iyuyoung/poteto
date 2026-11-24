@@ -149,7 +149,7 @@ export const OfficialPotatoMascot: React.FC<{
       className={className}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      aria-label="Poteto #01 对照组土豆"
+      aria-label="Spud #01 Control Potato"
     >
       {sprout && (
         <path

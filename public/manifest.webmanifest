@@ -1,11 +1,11 @@
 {
-  "name": "Poteto 人类资格年审",
+  "name": "Poteto — Daily Human Audit",
   "short_name": "Poteto",
-  "description": "免注册、零门槛的每日 90 秒人类资格年审，与北海道对照组土豆同场竞技。",
+  "description": "Zero-login 90-second daily CAPTCHA comedy game against an unbothered Idaho potato.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#FAF7F0",
-  "theme_color": "#1C1917",
+  "background_color": "#FAFAFB",
+  "theme_color": "#1A73E8",
   "icons": [
     {
       "src": "/icon-192.png",

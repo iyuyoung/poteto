@@ -24,7 +24,7 @@ const jsonLdList = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 ---
 
 <!doctype html>
-<html lang="zh-CN" data-theme="light">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -41,14 +41,14 @@ const jsonLdList = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
     <!-- OpenGraph -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Poteto 人类资格年审" />
+    <meta property="og:site_name" content="Poteto — Daily Human Audit" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -85,9 +85,9 @@ const jsonLdList = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
           </span>
         </a>
 
-        <nav aria-label="主导航" class="flex items-center gap-5 text-xs font-medium text-[#71717A]">
-          <a href="/#faq" class="transition-colors hover:text-[#09090B]">规则</a>
-          <a href="/about" class="transition-colors hover:text-[#09090B]">关于</a>
+        <nav aria-label="Main navigation" class="flex items-center gap-5 text-xs font-medium text-[#71717A]">
+          <a href="/#faq" class="transition-colors hover:text-[#09090B]">FAQ</a>
+          <a href="/about" class="transition-colors hover:text-[#09090B]">About</a>
         </nav>
       </div>
     </header>
@@ -100,7 +100,7 @@ const jsonLdList = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
     <footer class="mt-20 border-t border-[#E4E4E7]/80 bg-white/60">
       <div class="mx-auto flex max-w-3xl flex-col items-center justify-between gap-3 px-4 py-6 text-xs text-[#71717A] sm:flex-row sm:px-6">
         <p>
-          Poteto 人类资格年审 ·
+          Poteto Daily Human Audit ·
           <a
             href={`mailto:${contactEmail}`}
             class="font-mono text-[#18181B] underline decoration-[#D4D4D8] underline-offset-4 hover:decoration-[#1A73E8]"
@@ -109,9 +109,9 @@ const jsonLdList = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
           </a>
         </p>
         <div class="flex items-center gap-5">
-          <a href="/about" class="hover:text-[#09090B]">关于</a>
-          <a href="/privacy" class="hover:text-[#09090B]">隐私</a>
-          <a href="/terms" class="hover:text-[#09090B]">条款</a>
+          <a href="/about" class="hover:text-[#09090B]">About</a>
+          <a href="/privacy" class="hover:text-[#09090B]">Privacy</a>
+          <a href="/terms" class="hover:text-[#09090B]">Terms</a>
         </div>
       </div>
     </footer>

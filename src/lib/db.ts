@@ -90,7 +90,7 @@ export async function getDailyAuditPayload(
           auditDate: String(r.audit_date),
           pathData: r.path_data as PotatoPathData,
           fooledCount: Number(r.fooled_count ?? 0),
-          authorTag: '全球匿名人类',
+          authorTag: 'Anonymous Human',
         }));
         source = 'neon';
       } else {
@@ -109,7 +109,7 @@ export async function getDailyAuditPayload(
             auditDate: String(r.audit_date),
             pathData: r.path_data as PotatoPathData,
             fooledCount: Number(r.fooled_count ?? 0),
-            authorTag: '全球匿名人类',
+            authorTag: 'Anonymous Human',
           }));
           source = 'neon';
         }
@@ -281,8 +281,8 @@ export async function getYesterdayHook(
           drawing: row.path_data as PotatoPathData,
           message:
             count > 0
-              ? `你昨天画的土豆，昨晚成功骗过了 ${displayCount} 个人类。`
-              : `你昨天画的土豆，昨晚被 ${displayCount} 人评为「最委屈的土豆」。`,
+              ? `Your potato doodle successfully gaslit ${displayCount} humans last night.`
+              : `Your potato doodle was voted "Most Existentially Exhausted" by ${displayCount} humans.`,
         };
       }
     } catch (err) {
@@ -300,7 +300,7 @@ export async function getYesterdayHook(
       auditDate: yesterday,
       fooledCount: fooled,
       drawing: localMatch.pathData,
-      message: `你昨天画的土豆，昨晚成功骗过了 ${fooled} 个人类。`,
+      message: `Your potato doodle successfully gaslit ${fooled} humans last night.`,
     };
   }
 

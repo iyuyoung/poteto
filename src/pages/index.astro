@@ -10,20 +10,20 @@ const initialDaily = await getDailyAuditPayload(todayUtc, getDatabaseUrl(Astro.l
 
 const faqs = [
   {
-    q: 'Poteto 人类资格年审是什么？需要注册吗？',
-    a: '免注册、零门槛的 90 秒每日网页小游戏。每天 UTC 00:00 全球玩家收到完全一致的 3 关题目，与北海道对照组土豆（Poteto #01）比拼人类纯度，完成后自动生成带手绘证件照的《人类资格鉴定书》。',
+    q: 'What is Poteto? Do I need an account to play?',
+    a: 'Poteto is a zero-login, 90-second daily CAPTCHA comedy game. Every day at UTC 00:00, everyone on Earth faces the exact same 3-stage audit against an unbothered Idaho control potato (Spud #01) and receives a custom Human License Certificate featuring their own sketch.',
   },
   {
-    q: '每天的三关分别考什么？',
-    a: '第 1 关辨别昨日网友手绘的矢量土豆与官方伪装项；第 2 关挑战每日轮换的 16 套反直觉微交互（连续 16 天不重复）；第 3 关用 10 秒 4 笔手绘当日荒诞命题土豆，既作证件照又成为明天的全球考题。',
+    q: 'What happens in the 3 daily stages?',
+    a: 'Stage 1 tests your instincts on yesterday\'s community-drawn vector potatoes (plus 1 sneaky fake rock). Stage 2 rotates through 16 unhinged anti-intuition mini-games with zero repeats across 16 days. Stage 3 gives you 10 seconds and 4 strokes to sketch a prompt potato that becomes your ID photo—and tomorrow\'s puzzle.',
   },
   {
-    q: '手绘土豆是如何存储与防滥用的？',
-    a: '不存任何图片，浏览器端将笔画归一化为 0–100 整数坐标并用 Ramer-Douglas-Peucker 算法压到 300–600 字节。配合前端 4 笔/限时/闭合度约束、次日精选池审核隔离，以及满 3 次举报自动熔断替换。',
+    q: 'How are sketches stored and moderated without image bloat?',
+    a: 'We never store PNG or JPEG files. Every doodle is normalized to a 0–100 integer grid and compressed via Ramer-Douglas-Peucker into 300–600 bytes of pure vector JSON. Moderation runs in three layers: strict stroke/timer/loop checks upfront, next-day curated pool isolation, and automatic 3-flag community takedowns.',
   },
   {
-    q: '做完今天还能继续玩吗？',
-    a: '可以。今日全球同题完成后会自动锁定成绩与连胜，在鉴定书下方点击「无尽年审」即可无限随机挑战全部 16 套微交互与社区画作。',
+    q: 'Can I keep playing after finishing today\'s audit?',
+    a: 'Yes! Once today\'s global daily audit is archived with your streak, hit "Enter Endless Mode" on your certificate to shuffle through all 16 mini-games and community potato prompts indefinitely.',
   },
 ];
 
@@ -31,15 +31,15 @@ const jsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'Poteto 人类资格年审',
+    name: 'Poteto — Daily Human Audit',
     url: siteUrl,
-    inLanguage: 'zh-CN',
-    description: '零登录门槛的每日 90 秒人类资格年审网页小游戏，与北海道对照组土豆同场竞技。',
+    inLanguage: 'en',
+    description: 'Zero-login 90-second daily CAPTCHA comedy game where you prove you are smarter than an Idaho potato.',
   },
   {
     '@context': 'https://schema.org',
     '@type': 'VideoGame',
-    name: 'Poteto — 每日人类资格年审',
+    name: 'Poteto — Daily Human Audit',
     url: siteUrl,
     genre: ['Casual', 'Puzzle', 'Comedy'],
     playMode: 'SinglePlayer',
@@ -48,7 +48,7 @@ const jsonLd = [
     offers: {
       '@type': 'Offer',
       price: '0',
-      priceCurrency: 'CNY',
+      priceCurrency: 'USD',
     },
   },
   {
@@ -67,8 +67,8 @@ const jsonLd = [
 ---
 
 <Layout
-  title="Poteto 人类资格年审 — 90秒证明你比一颗北海道土豆更像人类"
-  description="免注册、零门槛的每日全球同题网页小游戏。点击“我不是机器人”，挑战 3 关荒诞反直觉测试与手绘土豆，生成你的专属人类资格鉴定书。"
+  title="Poteto — Daily 90-Second Human Audit vs. an Idaho Potato"
+  description="No login required. Check 'I'm not a robot' to beat an unbothered Idaho potato across 3 absurd CAPTCHA stages and earn your laminated Human License."
   canonicalPath="/"
   jsonLd={jsonLd}
 >
@@ -79,8 +79,8 @@ const jsonLd = [
 
   <!-- Unobtrusive Below-the-Fold FAQ (Collapsed by default, SEO/GEO intact) -->
   <section id="faq" class="mx-auto max-w-xl px-4 pt-12 sm:px-6" aria-labelledby="faq-heading">
-    <h2 id="faq-heading" class="mb-4 text-center font-display text-sm font-semibold tracking-wider text-[#71717A] uppercase">
-      关于每日年审 · FAQ
+    <h2 id="faq-heading" class="mb-4 text-center font-display text-xs font-semibold tracking-wider text-[#71717A] uppercase">
+      Daily Audit · FAQ
     </h2>
     <div class="divide-y divide-[#E4E4E7] overflow-hidden rounded-2xl border border-[#E4E4E7] bg-white">
       {faqs.map((item) => (

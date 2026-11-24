@@ -22,22 +22,22 @@ const MAX_STROKES = 4;
 const TIME_LIMIT_SEC = 10;
 
 const SCAN_LINES = [
-  '正在激光扫描淀粉含水量…',
-  '比对北海道农协数据库…',
-  '测算你与土豆的基因重合度…',
+  'Scanning starch density...',
+  'Cross-checking Idaho Potato Commission...',
+  'Calculating your tuber DNA overlap...',
 ];
 
 function getLiveRoast(strokes: Stroke[], aspectRatio?: number, valid?: boolean): string {
-  if (strokes.length === 0) return '落笔即开始 10 秒倒计时，Poteto #01 正在围观你的画工。';
-  if (!valid) return '轮廓还没闭合，淀粉要漏出来了！让首尾再靠近一点。';
+  if (strokes.length === 0) return '10s timer starts on first stroke. Spud #01 is judging silently.';
+  if (!valid) return 'Close the loop on Stroke 1 or your starch is gonna leak out!';
   if (strokes.length === 1) {
-    if (aspectRatio && aspectRatio > 1.35) return '被生活压扁的宽体土豆，快给它点上眼睛！';
-    if (aspectRatio && aspectRatio < 0.78) return '修长抽象派土豆，快补两笔传神的眼神！';
-    return '圆得像颗鱼丸！快点上眼睛和表情赋予灵魂！';
+    if (aspectRatio && aspectRatio > 1.35) return 'Built like a pancake. Slap some eyes on it!';
+    if (aspectRatio && aspectRatio < 0.78) return 'Long boi energy. Give it a face!';
+    return 'Suspiciously round, like a bowling ball. Add eyes!';
   }
-  if (strokes.length === 2) return '嗯…单眼皮土豆有点独眼海盗的意思了。';
-  if (strokes.length === 3) return '这眼神已经开始嫌弃我了，还能再补 1 笔嘴！';
-  return '4 笔封神！堪称当代马铃薯文艺复兴！';
+  if (strokes.length === 2) return 'One eye? Bold choice going full cyclops pirate spud.';
+  if (strokes.length === 3) return 'That expression is already judging me back. 1 stroke left!';
+  return '4 strokes of pure Louvre-worthy chaos.';
 }
 
 export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
@@ -147,7 +147,7 @@ export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
     const pathData: PotatoPathData = { strokes };
     const check = validatePotatoDrawing(pathData);
     if (!check.valid) {
-      setErrorMsg(check.reason || '请画出一颗闭合的土豆轮廓。');
+      setErrorMsg(check.reason || 'Draw a closed potato outline first.');
       return;
     }
 
@@ -179,10 +179,10 @@ export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
 
       const geometryRoast =
         check.aspectRatio && check.aspectRatio > 1.35
-          ? '扁平抗压型轮廓'
+          ? 'wide pancake silhouette'
           : check.aspectRatio && check.aspectRatio < 0.78
-            ? '修长抽象派轮廓'
-            : '教科书级圆润弧度';
+            ? 'tall avant-garde silhouette'
+            : 'textbook tuber curvature';
 
       onComplete(
         {
@@ -190,7 +190,7 @@ export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
           passed: true,
           humanScore,
           potatoScore: 18,
-          summary: `${strokes.length} 笔完成「${prompt.badgeText}」（${geometryRoast}）。`,
+          summary: `Sketched "${prompt.badgeText}" in ${strokes.length} strokes (${geometryRoast}).`,
         },
         pathData
       );
@@ -212,17 +212,17 @@ export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
       className="overflow-hidden rounded-3xl border border-[#E4E4E7] bg-white shadow-[0_12px_36px_rgba(0,0,0,0.06)]"
     >
       {/* Clean Blue Verification Header */}
-      <div className="bg-[#1A73E8] px-6 py-5 text-white">
+      <div className="bg-[#1A73E8] px-6 py-4 text-white">
         <div className="flex items-center justify-between text-xs font-medium text-white/80">
-          <span>第 3 关 / 共 3 关 · 手绘证件照</span>
+          <span>STAGE 3 OF 3 · ID PHOTO SKETCH</span>
           <span className="font-mono tabular-nums">
-            {strokes.length} / {MAX_STROKES} 笔 · {timeLeft.toFixed(1)}s
+            {strokes.length} / {MAX_STROKES} strokes · {timeLeft.toFixed(1)}s
           </span>
         </div>
-        <h2 className="mt-1.5 font-display text-xl font-bold tracking-tight">
+        <h2 className="mt-1 font-display text-lg font-bold leading-snug tracking-tight sm:text-xl">
           {prompt.title}
         </h2>
-        <p className="mt-1 text-xs text-white/85">{prompt.hint}</p>
+        <p className="mt-0.5 text-xs text-white/85">{prompt.hint}</p>
       </div>
 
       {/* Countdown Progress Line */}
@@ -236,13 +236,12 @@ export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
       </div>
 
       <div className="p-5 sm:p-6">
-        {/* Live Roast Strip */}
         <p className="mb-4 text-center text-xs font-medium text-[#52525B]">
           {scanning ? SCAN_LINES[scanStep] : liveRoast}
         </p>
 
         {/* Spacious Vector Drawing Pad */}
-        <div className="relative mx-auto aspect-square w-full max-w-[320px] overflow-hidden rounded-2xl border-2 border-[#E4E4E7] bg-[#FAFAFB]">
+        <div className="relative mx-auto aspect-square w-full max-w-[310px] overflow-hidden rounded-2xl border-2 border-[#E4E4E7] bg-[#FAFAFB]">
           <div className="pointer-events-none absolute inset-7 rounded-full border border-dashed border-[#D4D4D8]" />
 
           {scanning && (
@@ -257,8 +256,8 @@ export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
           {strokes.length === 0 && activeStroke.length === 0 && (
             <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center text-[#A1A1AA]">
               <Pencil className="mb-2.5 h-6 w-6 opacity-55" strokeWidth={1.75} />
-              <span className="text-xs font-semibold text-[#71717A]">一笔画出土豆轮廓</span>
-              <span className="mt-1 text-[11px]">最多 4 笔 · 自动矢量压缩</span>
+              <span className="text-xs font-semibold text-[#71717A]">Draw your potato outline here</span>
+              <span className="mt-1 text-[11px]">Max 4 strokes · Auto-compressed SVG</span>
             </div>
           )}
 
@@ -303,7 +302,7 @@ export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
                     : 'bg-[#FEF3C7] text-[#B45309]'
                 }`}
               >
-                {liveCheck?.valid ? '轮廓合格' : '需近似闭合'}
+                {liveCheck?.valid ? 'Looks legit' : 'Close the loop'}
               </span>
               <span className="rounded-full bg-white/90 px-2.5 py-0.5 font-mono text-[#71717A] ring-1 ring-[#E4E4E7]">
                 {currentBytes} B
@@ -324,21 +323,21 @@ export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
               type="button"
               onClick={handleUndo}
               disabled={strokes.length === 0 || scanning}
-              aria-label="撤销上一笔"
+              aria-label="Undo last stroke"
               className="btn btn-sm h-10 rounded-xl border-[#E4E4E7] bg-white px-3 text-xs text-[#52525B] hover:bg-[#FAFAFB] disabled:opacity-40"
             >
               <Undo2 className="h-3.5 w-3.5" strokeWidth={1.75} />
-              <span>撤销</span>
+              <span>Undo</span>
             </button>
             <button
               type="button"
               onClick={handleReset}
               disabled={(strokes.length === 0 && !timerStarted) || scanning}
-              aria-label="重新绘制"
+              aria-label="Clear canvas"
               className="btn btn-sm h-10 rounded-xl border-[#E4E4E7] bg-white px-3 text-xs text-[#52525B] hover:bg-[#FAFAFB] disabled:opacity-40"
             >
               <RotateCcw className="h-3.5 w-3.5" strokeWidth={1.75} />
-              <span>重画</span>
+              <span>Clear</span>
             </button>
           </div>
 
@@ -355,10 +354,10 @@ export const Stage3DrawCanvas: React.FC<Stage3DrawCanvasProps> = ({
             }`}
           >
             {scanning
-              ? 'AI 鉴定中…'
+              ? 'Scanning...'
               : timeLeft <= 0 && liveCheck?.valid
-                ? '时间到，立即出证'
-                : '封存并出证'}
+                ? 'Time Up — Stamp It!'
+                : 'Submit & Get ID'}
           </button>
         </div>
       </div>

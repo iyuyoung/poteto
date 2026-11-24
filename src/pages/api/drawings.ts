@@ -22,7 +22,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     if (!clientId || !promptId || !body.pathData) {
       return new Response(
-        JSON.stringify({ ok: false, error: '缺少必要参数（clientId / promptId / pathData）。' }),
+        JSON.stringify({ ok: false, error: 'Missing required fields (clientId / promptId / pathData).' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
@@ -30,7 +30,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const bytes = estimateJsonBytes(body.pathData);
     if (bytes > 2048) {
       return new Response(
-        JSON.stringify({ ok: false, error: '矢量坐标体积超出上限（2KB）。' }),
+        JSON.stringify({ ok: false, error: 'Vector payload exceeds 2KB limit.' }),
         { status: 413, headers: { 'Content-Type': 'application/json' } }
       );
     }
@@ -61,7 +61,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   } catch (err) {
     console.error('[poteto] POST /api/drawings error:', err);
     return new Response(
-      JSON.stringify({ ok: false, error: '提交失败，请稍后重试。' }),
+      JSON.stringify({ ok: false, error: 'Submission failed. Please try again.' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }

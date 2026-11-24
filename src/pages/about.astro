@@ -5,8 +5,8 @@ const contactEmail = import.meta.env.PUBLIC_CONTACT_EMAIL || 'hello@poteto.fun';
 ---
 
 <Layout
-  title="关于 Poteto — 人类资格年审局与轻量矢量 UGC 架构"
-  description="了解 Poteto 每日人类资格年审的设计理念：零登录门槛、确定性全球同题种子、RDP 矢量压缩与三层反滥用安全网。"
+  title="About Poteto — The Daily Human Qualification Audit"
+  description="How Poteto works: zero-login daily global CAPTCHA seeds, 500-byte vector potato doodles, and three-layer anti-spam safety."
   canonicalPath="/about"
 >
   <article class="mx-auto max-w-2xl px-4 py-10 sm:px-6">
@@ -15,32 +15,33 @@ const contactEmail = import.meta.env.PUBLIC_CONTACT_EMAIL || 'hello@poteto.fun';
         ABOUT POTETO
       </span>
       <h1 class="mt-2 font-display text-2xl font-extrabold tracking-tight text-[#09090B] sm:text-3xl">
-        为什么我们要和一颗北海道土豆比赛当人类？
+        Why are we competing against an Idaho potato to stay human?
       </h1>
 
-      <div class="mt-6 space-y-5 text-sm leading-relaxed text-[#44403C] sm:text-base">
+      <div class="mt-6 space-y-5 text-sm leading-relaxed text-[#3F3F46]">
         <p>
-          每天我们都在互联网上无数次勾选「我不是机器人」，辨认模糊的红绿灯和消防栓。
-          <strong>Poteto 人类资格年审</strong> 把这套严肃的验证流程改造成一场 90 秒的每日荒诞仪式：你不再对抗 AI，而是对抗一颗来自北海道、永远情绪稳定的对照组土豆（Poteto #01）。
+          Every day we click &ldquo;I&apos;m not a robot&rdquo; and hunt for grainy crosswalks just to prove our humanity to algorithms.
+          <strong>Poteto</strong> flips that ritual into a 90-second daily comedy audit: instead of outsmarting AI, you go head-to-head against a completely unbothered Idaho russet (Spud #01).
         </p>
 
-        <h2 class="pt-2 font-display text-xl font-bold text-[#1C1917]">核心架构原则</h2>
+        <h2 class="pt-2 font-display text-lg font-bold text-[#09090B]">Core Design Principles</h2>
         <ul class="list-disc space-y-2 pl-5">
-          <li><strong>零登录门槛</strong>：无需注册或绑定手机号，通过本地匿名 UUID 记录连胜与昨日画作回访战报。</li>
-          <li><strong>确定性全球同题</strong>：基于 UTC 日期生成确定性随机种子，全球玩家每天面对完全一致的题目与社区画作池。</li>
-          <li><strong>超轻矢量存储</strong>：手绘土豆经归一化与 Ramer-Douglas-Peucker 抽稀后仅占 300–600 字节，无限高清 SVG 渲染且零图片流量成本。</li>
-          <li><strong>三层内容安全网</strong>：3 笔 + 8 秒 + 闭合度与长宽比前端硬约束、次日精选池审核隔离、满 3 次举报自动熔断顶替。</li>
+          <li><strong>Zero Login Friction</strong>: No sign-ups, no popups. Your streak and yesterday&apos;s doodle stats stay tied to an anonymous local UUID.</li>
+          <li><strong>Global Deterministic Seed</strong>: Seeded daily by UTC date so every player worldwide gets the exact same 3-stage audit.</li>
+          <li><strong>Ultra-Light Vector UGC</strong>: Hand-drawn potatoes are normalized to a 0–100 grid and simplified via Ramer-Douglas-Peucker to 300–600 bytes of JSON—zero image uploads.</li>
+          <li><strong>Three-Layer Safety Net</strong>: 4-stroke / 10-second / closed-loop constraints upfront, next-day curated pool isolation, and automatic 3-flag community takedowns.</li>
         </ul>
 
-        <h2 class="pt-2 font-display text-xl font-bold text-[#1C1917]">联系我们</h2>
+        <h2 class="pt-2 font-display text-lg font-bold text-[#09090B]">Say Hello</h2>
         <p>
-          如果你有更离谱的第 2 关交互脑洞、合作建议或任何问题，欢迎发送邮件至：
+          Got an even more unhinged Stage 2 mini-game idea or feedback? Drop us a line at{' '}
           <a
             href={`mailto:${contactEmail}`}
-            class="font-mono font-semibold text-[#C86D2D] underline underline-offset-2"
+            class="font-mono font-semibold text-[#1A73E8] underline underline-offset-2"
           >
             {contactEmail}
           </a>
+          .
         </p>
       </div>
     </div>
